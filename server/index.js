@@ -31,13 +31,8 @@ app.get("/api/get",(req,res)=>{
 
 
 app.post('/api/post',(req,res)=>{
-    const client_id=req.body.client_id;
-    const fname=req.body.fname;
-    const mname=req.body.mname;
-    const lname=req.body.lname;
-    const phone=req.body.phone;
-    const email=req.body.email;
-    const passport = req.body.passport;
+
+    const {client_id,fname,mname,lname,phone,email,passport}=req.body;
     const sqlInsert='insert into clients values (?,?,?,?,?,?,?)';
     db.query(sqlInsert,[client_id,fname,mname,lname,phone,email,passport],(err,result)=>{
         if(err)
@@ -46,7 +41,7 @@ app.post('/api/post',(req,res)=>{
 })
 
 
-
+//delete info
 app.delete('/api/remove/:id',(req,res)=>{
     const {id}=req.params;
     const sqlRemove='delete from clients where client_id=?';
@@ -56,11 +51,11 @@ app.delete('/api/remove/:id',(req,res)=>{
     })
 })
 
-
+//get info for update
 app.get("/api/get/:id",(req,res)=>{
     const {id}=req.params;
     const sqlGet="select * from clients where client_id=?;"
-    db.query(sqlGet,[id],(err,result)=>{
+    db.query(sqlGet,id,(err,result)=>{
         if(err)
         res.send({err: err});
         else
@@ -68,18 +63,12 @@ app.get("/api/get/:id",(req,res)=>{
     })
 })
 
-
-app.put("/api/put/:id",(req,res)=>{
+//update info
+app.put("/api/update/:id",(req,res)=>{
     const {id}=req.params;
-    const client_id=req.body.client_id;
-    const fname=req.body.fname;
-    const mname=req.body.mname;
-    const lname=req.body.lname;
-    const phone=req.body.phone;
-    const email=req.body.email;
-    const passport = req.body.passport;
-    const sqlRemove="update clients set client_id=?,fname=?,mname=?,lname=?,phone=?,email=?,passport=? where client_id=?";
-    db.query(sqlRemove,[client_id,fname,mname,lname,phone,email,passport,id],(err,result)=>{
+    const {client_id,fname,mname,lname,phone,email,passport}=req.body;
+    const sqlUpdate="update clients set client_id=?,fname=?,mname=?,lname=?,phone=?,email=?,passport=? where client_id=?";
+    db.query(sqlUpdate,[client_id,fname,mname,lname,phone,email,passport,id],(err,result)=>{
         if(err)
         res.send({err: err});
         else

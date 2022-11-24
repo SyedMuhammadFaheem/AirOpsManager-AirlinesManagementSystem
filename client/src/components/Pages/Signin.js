@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import Axios from 'axios'
-import './Signin.css';
+import './styles/Signin.css';
 import { withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -49,7 +49,7 @@ class Signin extends Component {
         '',
         'success'
       )
-        setTimeout(()=>this.props.history.push("/Client"),500); 
+        setTimeout(()=>this.props.history.push("/AdminPanel"),500); 
     }
   })
 

@@ -11,8 +11,8 @@ import Signup from "./components/Pages/Signup";
 import Client from "./components/Pages/Client";
 import Navbar from "./components/Navbar";
 import AddEditClient from "./components/Pages/AddEditClient";
-
-
+import ViewClient from './components/Pages/ViewClient'
+import AdminPanel from "./components/Pages/AdminPanel";
 function App() {
   return (
     <BrowserRouter>
@@ -21,8 +21,10 @@ function App() {
           <Route path='/signin' component={Signin}/>
           <Route path='/sign-up' component={Signup}/>
           <Route path='/Client' component={Client}/>
-          <Route path='/AddClient' component={AddEditClient}/>
+          <Route path='/AdminPanel' component={AdminPanel}/>
+          <Route path='/AddEditClient' component={AddEditClient}/>
           <Route path='/Update/:id' component={AddEditClient}/>
+          <Route path='/View/:id' component={ViewClient}/>
           <>
           <Navbar/>
           <Route exact path='/' component={Home}/>

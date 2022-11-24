@@ -4,7 +4,6 @@
     font-size:0.9 em;
     font-family:sans-serif;
     box-shadow: 0 0 20px rgba(0,0,0,0.15);
-
 }
 
 
@@ -61,7 +60,8 @@
 .btn-client{
     background-color: #e82764;
     margin-bottom: 50px;
-    margin-left:24.25%;
+    margin-top: 50px;
+    margin-left:18.5%;
     width:100px;
 }
 
