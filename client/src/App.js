@@ -13,6 +13,17 @@ import Navbar from "./components/Navbar";
 import AddEditClient from "./components/Pages/AddEditClient";
 import ViewClient from './components/Pages/ViewClient'
 import AdminPanel from "./components/Pages/AdminPanel";
+import AddEditAirplane from "./components/Pages/AddEditAirplane";
+import ViewAirplane from "./components/Pages/ViewAirplane";
+import Airplane from "./components/Pages/Airplane";
+import FlightStatus from "./components/Pages/FlightStatus";
+import ViewFlightStatus from "./components/Pages/ViewFlightStatus";
+import Gates from "./components/Pages/Gates";
+import ViewGates from "./components/Pages/ViewGates";
+import Airport from "./components/Pages/Airport";
+import ViewAirport from "./components/Pages/ViewAirport";
+import Reviews from "./components/Pages/Reviews";
+import ViewReviews from "./components/Pages/ViewReviews";
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +36,18 @@ function App() {
           <Route path='/AddEditClient' component={AddEditClient}/>
           <Route path='/Update/:id' component={AddEditClient}/>
           <Route path='/View/:id' component={ViewClient}/>
+          <Route path='/Airplane' component={Airplane}/>
+          <Route path='/AddEditAirplane' component={AddEditAirplane}/>
+          <Route path='/UpdateAirplane/:id' component={AddEditAirplane}/>
+          <Route path='/ViewAirplane/:id' component={ViewAirplane}/>
+          <Route path='/FlightStatus' component={FlightStatus}/>
+          <Route path='/ViewFlightStatus/:id' component={ViewFlightStatus}/>
+          <Route path='/Gates' component={Gates}/>
+          <Route path='/ViewGates/:id' component={ViewGates}/>
+          <Route path='/Airport' component={Airport}/>
+          <Route path='/ViewAirport/:id' component={ViewAirport}/>
+          <Route path='/Reviews' component={Reviews}/>
+          <Route path='/ViewReviews/:id' component={ViewReviews}/>
           <>
           <Navbar/>
           <Route exact path='/' component={Home}/>

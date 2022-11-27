@@ -11,12 +11,21 @@ const Sidebar=() => {
       <Link className="menu-item" to="/Client">
         Clients
       </Link>
-      <a className="menu-item" href="/pizzas">
-        Pizzas
-      </a>
-      <a className="menu-item" href="/desserts">
-        Desserts
-      </a>
+      <Link className="menu-item" to="/Airplane">
+        Airplane
+      </Link>
+      <Link className="menu-item" to="/FlightStatus">
+        Flight Status
+      </Link>
+      <Link className="menu-item" to="/Gates">
+        Gates
+      </Link>
+      <Link className="menu-item" to="/Airport">
+        Airport
+      </Link>
+      <Link className="menu-item" to="/Reviews">
+        Reviews
+      </Link>
     </Menu>
   );
 };
