@@ -97,7 +97,7 @@ const AddEditAirplane = () => {
         <label htmlFor="max-seats">Max Seats</label>
         <input
           type="text" name="max_seats" value={max_seats || ""}
-          placeholder="First Name"
+          placeholder="Max Seats"
           onChange={handleInputChange}
         />
 

@@ -26,6 +26,15 @@ const Sidebar=() => {
       <Link className="menu-item" to="/Reviews">
         Reviews
       </Link>
+      <Link className="menu-item" to="/Schedule">
+        Schedule
+      </Link>
+      <Link className="menu-item" to="/Flight">
+        Flight
+      </Link>
+      <Link className="menu-item" to="/Ticket">
+        Ticket
+      </Link>
     </Menu>
   );
 };

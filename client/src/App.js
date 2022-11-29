@@ -24,6 +24,15 @@ import Airport from "./components/Pages/Airport";
 import ViewAirport from "./components/Pages/ViewAirport";
 import Reviews from "./components/Pages/Reviews";
 import ViewReviews from "./components/Pages/ViewReviews";
+import Schedule from "./components/Pages/Schedule";
+import AddEditSchedule from "./components/Pages/AddEditSchedule";
+import ViewSchedule from "./components/Pages/ViewSchedule";
+import AddFlight from "./components/Pages/AddFlight";
+import Flight from "./components/Pages/Flight";
+import ViewFlight from "./components/Pages/ViewFlight";
+import Ticket from "./components/Pages/Ticket";
+import EditTicket from "./components/Pages/EditTicket";
+import ViewTicket from "./components/Pages/ViewTicket";
 function App() {
   return (
     <BrowserRouter>
@@ -48,6 +57,16 @@ function App() {
           <Route path='/ViewAirport/:id' component={ViewAirport}/>
           <Route path='/Reviews' component={Reviews}/>
           <Route path='/ViewReviews/:id' component={ViewReviews}/>
+          <Route path='/Schedule' component={Schedule}/>
+          <Route path='/AddEditSchedule' component={AddEditSchedule}/>
+          <Route path='/UpdateSchedule/:id' component={AddEditSchedule}/>
+          <Route path='/ViewSchedule/:id' component={ViewSchedule}/>
+          <Route path='/Flight' component={Flight}/>
+          <Route path='/AddFlight' component={AddFlight}/>
+          <Route path='/ViewFlight/:id' component={ViewFlight}/>
+          <Route path='/Ticket' component={Ticket}/>
+          <Route path='/EditTicket' component={EditTicket}/>
+          <Route path='/ViewTicket/:id' component={ViewTicket}/>
           <>
           <Navbar/>
           <Route exact path='/' component={Home}/>

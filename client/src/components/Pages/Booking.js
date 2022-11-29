@@ -9,7 +9,7 @@ const Client = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/book/api/get');
+    const response= await Axios.get('http://localhost:5000/booking/api/get');
     setData(response.data);
   }
 
@@ -27,12 +27,11 @@ const Client = () => {
             <tr>
               <th style={{textAlign:'center'}}>S. No</th>
               <th style={{textAlign:'center'}}>Client ID</th>
-              <th style={{textAlign:'center'}}>First Name</th>
-              <th style={{textAlign:'center'}}>Middle Name</th>
-              <th style={{textAlign:'center'}}>Last Name</th>
-              <th style={{textAlign:'center'}}>Phone</th>
-              <th style={{textAlign:'center'}}>Email</th>
-              <th style={{textAlign:'center'}}>Passport</th>
+              <th style={{textAlign:'center'}}>Airport Code</th>
+              <th style={{textAlign:'center'}}>Ticket ID</th>
+              <th style={{textAlign:'center'}}>Flight No</th>
+              <th style={{textAlign:'center'}}>Admin ID</th>
+              <th style={{textAlign:'center'}}>Fares</th>
               <th style={{textAlign:'center'}}>Action</th>
             </tr>
             </thead>
@@ -42,17 +41,16 @@ const Client = () => {
                   <tr key={index}>
                     <th scope='row'>{index+1}</th>
                     <td>{item.client_id}</td>
-                    <td>{item.fname}</td>
-                    <td>{item.mname}</td>
-                    <td>{item.lname}</td>
-                    <td>{item.phone}</td>
-                    <td>{item.email}</td>
-                    <td>{item.passport}</td>
+                    <td>{item.airport_code}</td>
+                    <td>{item.ticket_id}</td>
+                    <td>{item.flight_no}</td>
+                    <td>{item.admin_id}</td>
+                    <td>{item.fares}</td>
                     <td>
-                      <Link to={`/Update/${item.client_id}`}>
+                      <Link to={`/UpdateBooking/${item.client_id}`}>
                         <button className='btn btn-edit'>Edit</button>
                       </Link>
-                      <Link to={`/View/${item.client_id}`}>
+                      <Link to={`/ViewBooking/${item.client_id}`}>
                         <button className='btn btn-view'>View</button>
                       </Link>
                     </td>
