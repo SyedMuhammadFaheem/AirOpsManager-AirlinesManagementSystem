@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import Axios from 'axios'
 import './styles/Signin.css';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 class Signin extends Component {
@@ -61,11 +61,11 @@ class Signin extends Component {
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Sign In</h3>
           <div className="form-group mt-3">
-            <label>Username</label>
+            <label>Email</label>
             <input
-              type="username" onChange={this.handleUsernameChange}
+              type="email" onChange={this.handleUsernameChange}
               className="form-control mt-1"
-              placeholder="Username" required
+              placeholder="e.g John@example.com" required
             />
           </div>
           <div className="form-group mt-3">
@@ -78,11 +78,11 @@ class Signin extends Component {
           </div>
           <div className="d-grid gap-2 mt-3">
             <button type="submit" className="btn btn-primary">
-              Login
+              Submit
             </button>
           </div>
           <p className="forgot-password text-right mt-2">
-            Forgot <a href="Home">password?</a>
+            Not Registered? <Link to="/sign-up"><a href="">Signup</a></Link>
           </p>
         </div>
       </form>

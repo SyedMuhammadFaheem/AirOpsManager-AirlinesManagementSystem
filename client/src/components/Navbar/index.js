@@ -15,8 +15,8 @@ const Navbar = () => {
                 {/* <h3>FMA Airlines Management</h3> */}
             </NavLink>
             <NavMenu>
-            <NavLink to='/services' >
-                Book
+            <NavLink to='/viewflight' >
+                View Flights
             </NavLink>
             <NavLink to='/about' >
                 About

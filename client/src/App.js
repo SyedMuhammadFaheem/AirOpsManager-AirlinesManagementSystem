@@ -33,6 +33,9 @@ import ViewFlight from "./components/Pages/ViewFlight";
 import Ticket from "./components/Pages/Ticket";
 import EditTicket from "./components/Pages/EditTicket";
 import ViewTicket from "./components/Pages/ViewTicket";
+import BookTicket from "./components/Pages/BookTicket";
+import AvailableFlights from "./components/Pages/AvailableFlights";
+import CustomerSignin from "./components/Pages/CustomerSignin";
 function App() {
   return (
     <BrowserRouter>
@@ -41,6 +44,7 @@ function App() {
           <Route path='/signin' component={Signin}/>
           <Route path='/sign-up' component={Signup}/>
           <Route path='/Client' component={Client}/>
+          <Route path='/AvailableFlights' component={AvailableFlights}/>
           <Route path='/AdminPanel' component={AdminPanel}/>
           <Route path='/AddEditClient' component={AddEditClient}/>
           <Route path='/Update/:id' component={AddEditClient}/>
@@ -67,9 +71,11 @@ function App() {
           <Route path='/Ticket' component={Ticket}/>
           <Route path='/EditTicket' component={EditTicket}/>
           <Route path='/ViewTicket/:id' component={ViewTicket}/>
+          <Route path='/CustomerSignin' component={CustomerSignin}/>
           <>
           <Navbar/>
           <Route exact path='/' component={Home}/>
+          <Route path='/viewflight' component={BookTicket}/>
           <Route path='/about' component={About}/>
           <Route path='/contact-us' component={Contact}/>
           </>

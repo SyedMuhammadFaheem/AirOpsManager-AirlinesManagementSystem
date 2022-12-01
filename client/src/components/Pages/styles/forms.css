@@ -1,0 +1,66 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+fieldset {
+  width: 80%;
+  margin: 0 auto;
+}
+
+input {
+  background: none;
+  border: 2px solid #505050;
+  color: #505050;
+  padding: 2px 10px;
+  font-size: 18px;
+}
+
+input {
+  border: none;
+  border-bottom: 2px solid #505050;
+}
+
+input:focus,
+input:active {
+  outline: none;
+}
+
+input[type="submit"] {
+  color: white;
+  background-color: #505050;
+}
+
+.input-group {
+  position: relative;
+  display: inline-block;
+  width: 80%;
+}
+
+.input-group label {
+  position: absolute;
+  color: #999;
+  font-family: "Roboto", sans-serif;
+  pointer-events: none;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
+  -webkit-transform: scale(0.9) translateY(100%);
+  transform: scale(0.9) translateY(100%);
+  -webkit-transition: -webkit-transform 0.2s linear;
+  transition: -webkit-transform 0.2s linear;
+  transition: transform 0.2s linear;
+  transition: transform 0.2s linear, -webkit-transform 0.2s linear;
+}
+
+.input-group label.animate-label {
+  -webkit-transform: scale(0.6) translateY(0%);
+  transform: scale(0.6) translateY(0%);
+  -webkit-transition: -webkit-transform 0.2s linear;
+  transition: -webkit-transform 0.2s linear;
+  transition: transform 0.2s linear;
+  transition: transform 0.2s linear, -webkit-transform 0.2s linear;
+}
+
+.input-group input {
+  padding-top: 20px;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/*# sourceMappingURL=form.css.map */

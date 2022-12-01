@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom';
 const Signup = () => {
   return (
     <div className="Auth-form-container">
@@ -6,19 +7,51 @@ const Signup = () => {
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Sign Up</h3>
           <div className="form-group mt-3">
-            <label>Full Name</label>
+            <label>First Name</label>
             <input
-              type="email"
+              type="username"
               className="form-control mt-1"
-              placeholder="e.g Jane Doe"
+              placeholder="e.g Jane"
             />
           </div>
           <div className="form-group mt-3">
-            <label>Email address</label>
+            <label>Middle Name</label>
+            <input
+              type="username"
+              className="form-control mt-1"
+              placeholder="e.g Doe"
+            />
+          </div>
+          <div className="form-group mt-3">
+            <label>Last Name</label>
+            <input
+              type="username"
+              className="form-control mt-1"
+              placeholder="e.g Smith"
+            />
+          </div>
+          <div className="form-group mt-3">
+            <label>Phone</label>
+            <input
+              type="tel"
+              className="form-control mt-1"
+              placeholder="e.g 923312613326"
+            />
+          </div>
+          <div className="form-group mt-3">
+            <label>Email</label>
             <input
               type="email"
               className="form-control mt-1"
-              placeholder="Enter email"
+              placeholder="e.g John@example.com"
+            />
+          </div>
+          <div className="form-group mt-3">
+            <label>Passport</label>
+            <input
+              type="text"
+              className="form-control mt-1"
+              placeholder="Passport"
             />
           </div>
           <div className="form-group mt-3">
@@ -26,7 +59,7 @@ const Signup = () => {
             <input
               type="password"
               className="form-control mt-1"
-              placeholder="Enter password"
+              placeholder="e.g rXhAz29$%1"
             />
           </div>
           <div className="d-grid gap-2 mt-3">
@@ -35,7 +68,7 @@ const Signup = () => {
             </button>
           </div>
           <p className="forgot-password text-right mt-2">
-            Forgot <a href='Home'>password?</a>
+            Already have an account? <Link to='/CustomerSignin'><a href=''> Login</a></Link>
           </p>
         </div>
       </form>
