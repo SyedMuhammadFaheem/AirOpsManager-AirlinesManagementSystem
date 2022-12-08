@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import Axios from "axios";
 import "./styles/Invoice.css";
+import Swal from 'sweetalert2'
 const initialState = {
   sc_id: "",
   cl_id: "",
   price: "",
 };
 const Invoice = () => {
+  Swal=withReactContent(Swal)
   const { id } = useParams();
   const [data, setData] = useState({});
   const [user, setUser] = useState({});
@@ -43,8 +45,8 @@ const Invoice = () => {
       fares: user.price.substr(2, 6),
     });
     console.log(res.data);
-    // Axios.delete('http://localhost:5000/removeSearch');
-    //swal
+    Axios.delete('http://localhost:5000/removeSearch');
+    Swal.fire("Ticket Booked Successfully!", "", "success");
     setTimeout(() => history.push(`/BoardingPass/${id.slice(2, 4)}`), 500);
   };
   return (
