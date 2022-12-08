@@ -1,4 +1,7 @@
-
+.bg-image{
+  background-image: url('../../../images/pexels-ahmed-muntasir-912050.jpg');
+  background-repeat: no-repeat;
+}
 .Auth-form-container {
   display: flex;
   justify-content: center;

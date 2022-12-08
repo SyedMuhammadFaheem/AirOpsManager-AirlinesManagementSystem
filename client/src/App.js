@@ -36,6 +36,13 @@ import ViewTicket from "./components/Pages/ViewTicket";
 import BookTicket from "./components/Pages/BookTicket";
 import AvailableFlights from "./components/Pages/AvailableFlights";
 import CustomerSignin from "./components/Pages/CustomerSignin";
+import CustomerPanel from "./components/Pages/CustomerPanel";
+import ViewProfile from "./components/Pages/ViewProfile";
+import BoardingPass from "./components/Pages/BoardingPass";
+import Invoice from "./components/Pages/Invoice";
+import AddReviews from "./components/Pages/AddReviews";
+import ViewCustomerTickets from "./components/Pages/ViewCustomerTickets";
+import Booking from "./components/Pages/Booking";
 function App() {
   return (
     <BrowserRouter>
@@ -44,7 +51,7 @@ function App() {
           <Route path='/signin' component={Signin}/>
           <Route path='/sign-up' component={Signup}/>
           <Route path='/Client' component={Client}/>
-          <Route path='/AvailableFlights' component={AvailableFlights}/>
+          <Route path='/AvailableFlights/:id' component={AvailableFlights}/>
           <Route path='/AdminPanel' component={AdminPanel}/>
           <Route path='/AddEditClient' component={AddEditClient}/>
           <Route path='/Update/:id' component={AddEditClient}/>
@@ -72,10 +79,19 @@ function App() {
           <Route path='/EditTicket' component={EditTicket}/>
           <Route path='/ViewTicket/:id' component={ViewTicket}/>
           <Route path='/CustomerSignin' component={CustomerSignin}/>
+          <Route path='/CustomerPanel/:id' component={CustomerPanel}/>
+          <Route path='/ViewProfile/:id' component={ViewProfile}/>
+          <Route path='/CustomerPanel/:id' component={CustomerPanel}/>
+          <Route path='/BookTicket/:id' component={BookTicket}/>
+          <Route path='/BoardingPass/:id' component={BoardingPass}/>
+          <Route path='/Invoice/:id' component={Invoice}/>
+          <Route path='/AddReviews/:id' component={AddReviews}/>
+          <Route path='/ViewCustomerTickets/:id' component={ViewCustomerTickets}/>
+          <Route path='/Booking' component={Booking}/>
           <>
           <Navbar/>
           <Route exact path='/' component={Home}/>
-          <Route path='/viewflight' component={BookTicket}/>
+          <Route path='/BookTicket' component={BookTicket}/>
           <Route path='/about' component={About}/>
           <Route path='/contact-us' component={Contact}/>
           </>

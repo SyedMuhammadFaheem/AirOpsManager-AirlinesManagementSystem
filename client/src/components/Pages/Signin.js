@@ -49,14 +49,14 @@ class Signin extends Component {
         '',
         'success'
       )
-        setTimeout(()=>this.props.history.push("/AdminPanel"),500); 
+        setTimeout(()=>this.props.history.push('/AdminPanel'),500); 
     }
   })
 
   }
   render (){
     return(
-    <div className="Auth-form-container">
+    <div className="Auth-form-container bg-image">
       <form className="Auth-form" onSubmit={this.Login}>
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Sign In</h3>
@@ -65,7 +65,7 @@ class Signin extends Component {
             <input
               type="username" onChange={this.handleUsernameChange}
               className="form-control mt-1"
-              placeholder="Username" required
+              placeholder="Username" required style={{width:'320px'}}
             />
           </div>
           <div className="form-group mt-3">
@@ -73,7 +73,7 @@ class Signin extends Component {
             <input
               type="password" onChange={this.handlePasswordChange} 
               className="form-control mt-1"
-              placeholder="e.g rXhAz29$%1" required
+              placeholder="e.g rXhAz29$%1" required style={{width:'320px'}}
             />
           </div>
           <div className="d-grid gap-2 mt-3">

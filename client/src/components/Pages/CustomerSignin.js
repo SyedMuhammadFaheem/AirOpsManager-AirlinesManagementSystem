@@ -1,79 +1,73 @@
-import React,{Component} from 'react'
-import Axios from 'axios'
-import './styles/Signin.css';
-import { Link, withRouter } from 'react-router-dom';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-class Signin extends Component {
-  Swal=withReactContent(Swal)
-  constructor(props)
-  {
-    super(props);
-    this.state = {
-      usernameLogin: '',
-      passwordLogin: '',
-    };
-  }
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
+import "./styles/Signin.css";
+import { useHistory, Link } from "react-router-dom";
+import Swale from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const initialState = {
+  emailLogin: "",
+  passwordLogin: "",
+};
+const initial={
+  id:"",
+}
+const Signin = () => {
+  const Swal = withReactContent(Swale);
+  const [state, setState] = useState(initialState);
+  const { emailLogin, passwordLogin } = state;
 
-  handleUsernameChange = (event) => {
-    this.setState({
-      usernameLogin: event.target.value,
+  const history = useHistory();
+  const loadData = async () => {
+    const response = await Axios.post("http://localhost:5000/getcustomerlogin",{
+      email: emailLogin,
+      password: passwordLogin,
     });
-  };
-
-  handlePasswordChange = (event) => {
-    this.setState({
-      passwordLogin: event.target.value,
-    });
+    initial.id=response.data[0].client_id
   };
   
-  Login=(event)=>{
-    event.preventDefault();
-    Axios.post('http://localhost:5000/login', {
-      username:this.state.usernameLogin,
-      password:this.state.passwordLogin,
-    }).then((response)=>{
-    if(response.data.msg)
-    {
-      Swal.fire(
-        'Invalid Login!',
-        '',
-        'error'
-      )
-    }
-    else
-    {
-      
-      Swal.fire(
-        'Login Success!',
-        '',
-        'success'
-      )
-        setTimeout(()=>this.props.history.push("/AdminPanel"),500); 
-    }
-  })
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setState({ ...state, [name]: value });
+  };
 
-  }
-  render (){
-    return(
-    <div className="Auth-form-container">
-      <form className="Auth-form" onSubmit={this.Login}>
+  const Login = (event) => {
+    event.preventDefault();
+    loadData();
+    Axios.post("http://localhost:5000/customerlogin", {
+      email: emailLogin,
+      password: passwordLogin,
+    }).then((response) => {
+      if (response.data.msg) {
+        Swal.fire("Invalid Login!", "", "error");
+      } else {
+        Swal.fire("Login Success!", "", "success");
+        setTimeout(()=>history.push(`/CustomerPanel/${initial.id}`),500)
+      }
+    });
+  };
+  return (
+    <div className="Auth-form-container bg-image">
+      <form className="Auth-form" onSubmit={Login}>
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Sign In</h3>
           <div className="form-group mt-3">
             <label>Email</label>
             <input
-              type="email" onChange={this.handleUsernameChange}
+              type="email" name="emailLogin" value={emailLogin}
+              onChange={handleInputChange}
               className="form-control mt-1"
-              placeholder="e.g John@example.com" required
+              placeholder="e.g John@example.com" style={{width:'320px'}}
+              required
             />
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
             <input
-              type="password" onChange={this.handlePasswordChange} 
+              type="password" name="passwordLogin" value={passwordLogin}
+              onChange={handleInputChange}
               className="form-control mt-1"
-              placeholder="e.g rXhAz29$%1" required
+              placeholder="e.g rXhAz29$%1" style={{width:'320px'}}
+              required
             />
           </div>
           <div className="d-grid gap-2 mt-3">
@@ -82,13 +76,15 @@ class Signin extends Component {
             </button>
           </div>
           <p className="forgot-password text-right mt-2">
-            Not Registered? <Link to="/sign-up"><a href="">Signup</a></Link>
+            Not Registered?{" "}
+            <Link to="/sign-up">
+              <a href="">Signup</a>
+            </Link>
           </p>
         </div>
       </form>
     </div>
-    );
-    }
+  );
 };
 
-export default withRouter(Signin)
+export default Signin;

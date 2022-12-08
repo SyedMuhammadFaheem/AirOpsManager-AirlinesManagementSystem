@@ -3,21 +3,13 @@ import { FaPlaneArrival, FaPlaneDeparture, FaChild } from "react-icons/fa";
 import { GiPerson } from "react-icons/gi";
 import { useForm } from "react-hook-form";
 import "./styles/BookTicket.css";
-import {useState,useEffect} from 'react';
-import {Link, useParams,useHistory} from 'react-router-dom';
-import Axios from 'axios';
-const initialState = {
-  from_airport: "",
-  to_airport: "",
-  departure_time: "",
-  arrival_time: "",
-  phone: "",
-  email: "",
-  passport: "",
-};
+import { useState, useEffect } from "react";
+import { Link, useParams, useHistory } from "react-router-dom";
+import Axios from "axios";
 
-const FlightApp = () => {
-  // handle event
+
+const BookTicket = () => {
+  
   const history = useHistory();
   const {
     register,
@@ -32,32 +24,41 @@ const FlightApp = () => {
     setData(response.data);
   };
 
-  
-  useEffect(()=>{
+  useEffect(() => {
     loadData();
-  },[]);
-
+  }, []);
+  const { id } = useParams();
   // handle submit
   const onSubmit = (data) => {
-    console.log(data);
-    // alert(JSON.stringify(data))
-    setTimeout(() => history.push("/AvailableFlights"), 100);
+    console.log(data.departure);
+    Axios.post("http://localhost:5000/BookTicket", {
+      departure: data.departure,
+      arrival: data.arrival,
+      departureDate: data.departureDate,
+      returnDate: data.returnDate,
+      class: data.class,
+      price: data.price,
+    }).then((response) => {
+      if (response.data.err) console.log(response.data.err);
+    });
+    // .catch((err) => toast.error(err.response.data));
+    setTimeout(() => history.push(`/AvailableFlights/${id}`), 100);
   };
   return (
-    <section>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="bg-white w-auto h-auto pb-10 mt-5 mx-5 px-5 rounded-lg sm:w-full md:w-4/5 md:mx-auto lg:w-2/5 lg:mx-auto">
+    <div className="bg-img">
+
+      <form onSubmit={handleSubmit(onSubmit)} >
           {/* header section */}
 
           {/* body section */}
           <div>
-            <div className="grid justify-center space-y-5 bg-indigo-50 pb-10">
+            <div className="grid justify-center space-y-5 pb-10" >
               {/* departure section */}
               <div>
                 <div>
-                  <div className="relative" style={{ marginTop: "20px" }}>
+                  <div className="relative" style={{ marginTop: "50px" }}>
                     <p className="font-bold text-xl uppercase">flying from</p>
-                    <select
+                    <select style={{ marginTop: "-15px"}}
                       className={`w-full h-16 text-2xl pl-20 rounded-lg ${errors.departure &&
                         " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
                       {...register("departure", {
@@ -65,7 +66,7 @@ const FlightApp = () => {
                           value: true,
                           message: "Departure is required",
                         },
-                      })} 
+                      })}
                     >
                       <option value="" selected disabled hidden>
                         --Select Airport--
@@ -80,7 +81,6 @@ const FlightApp = () => {
                           </>
                         );
                       })}
-                      
                     </select>
                     <FaPlaneDeparture className="text-4xl absolute left-5 top-10 " />
                   </div>
@@ -99,7 +99,7 @@ const FlightApp = () => {
                 <div>
                   <div className="relative">
                     <p className="font-bold text-xl uppercase">flying to</p>
-                    <select
+                    <select style={{ marginTop: "-15px" }}
                       className={`w-full h-16 text-2xl pl-20 rounded-lg ${errors.arrival &&
                         " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
                       {...register("arrival", {
@@ -144,7 +144,7 @@ const FlightApp = () => {
                       <p className="font-bold text-xl uppercase">
                         departure date
                       </p>
-                      <input
+                      <input style={{ marginTop: "-13px"}}
                         type="date"
                         className={`w-full h-16 text-2xl rounded-lg ${errors.departureDate &&
                           " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
@@ -171,7 +171,7 @@ const FlightApp = () => {
                   <div>
                     <div className="relative">
                       <p className="font-bold text-xl uppercase">return date</p>
-                      <input
+                      <input style={{ marginTop: "-13px"}}
                         type="date"
                         className={`w-full h-16 text-2xl rounded-lg ${errors.returnDate &&
                           " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
@@ -201,7 +201,7 @@ const FlightApp = () => {
                   <div>
                     <div>
                       <p className="font-bold text-xl uppercase"> class</p>
-                      <select
+                      <select style={{ marginTop: "-15px"}}
                         className="w-full h-16 rounded-lg text-2xl pl-20"
                         {...register("class", {
                           required: {
@@ -223,7 +223,7 @@ const FlightApp = () => {
                   <div>
                     <div>
                       <p className="font-bold text-xl uppercase"> price</p>
-                      <select
+                      <select style={{ marginTop: "-15px"}}
                         className="w-full h-16 rounded-lg text-2xl pl-20"
                         {...register("price", {
                           required: {
@@ -255,10 +255,9 @@ const FlightApp = () => {
               </div>
             </div>
           </div>
-        </div>
       </form>
-    </section>
+    </div>
   );
 };
 
-export default FlightApp;
+export default BookTicket;

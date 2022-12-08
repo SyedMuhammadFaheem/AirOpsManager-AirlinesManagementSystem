@@ -2,7 +2,6 @@ import React from 'react'
 import {useState,useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import Axios from 'axios';
-import {toast} from 'react-toastify';
 import Sidebar from './Sidebar';
 import './styles/Tables.css'
 const Ticket = () => {

@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 //select
 app.get("/api/get",(req,res)=>{
-    const sqlGet="select * from clients;"
+    const sqlGet="select * from client;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
@@ -32,7 +32,7 @@ app.get("/api/get",(req,res)=>{
 
 
 app.get("/airplane/api/get",(req,res)=>{
-    const sqlGet="select * from airplane;"
+    const sqlGet="select * from airplanes;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
@@ -42,7 +42,7 @@ app.get("/airplane/api/get",(req,res)=>{
 })
 
 app.get("/flightStatus/api/get",(req,res)=>{
-    const sqlGet="select * from FlightStatus;"
+    const sqlGet="select * from flightstatuses;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
@@ -53,7 +53,7 @@ app.get("/flightStatus/api/get",(req,res)=>{
 
 
 app.get("/airport/api/get",(req,res)=>{
-    const sqlGet="select * from airport;"
+    const sqlGet="select * from airports;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
@@ -63,7 +63,7 @@ app.get("/airport/api/get",(req,res)=>{
 })
 
 app.get("/gates/api/get",(req,res)=>{
-    const sqlGet="select * from gates;"
+    const sqlGet="select * from gate;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
@@ -74,7 +74,7 @@ app.get("/gates/api/get",(req,res)=>{
 
 
 app.get("/reviews/api/get",(req,res)=>{
-    const sqlGet="select * from customer_review;"
+    const sqlGet="select * from reviews;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
@@ -85,7 +85,7 @@ app.get("/reviews/api/get",(req,res)=>{
 
 
 app.get("/schedule/api/get",(req,res)=>{
-    const sqlGet="select * from schedule;"
+    const sqlGet="select * from schedules;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
@@ -96,7 +96,7 @@ app.get("/schedule/api/get",(req,res)=>{
 
 
 app.get("/flight/api/get",(req,res)=>{
-    const sqlGet="select * from flight;"
+    const sqlGet="select * from flights;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
@@ -107,7 +107,17 @@ app.get("/flight/api/get",(req,res)=>{
 
 
 app.get("/ticket/api/get",(req,res)=>{
-    const sqlGet="select * from ticket;"
+    const sqlGet="select * from tickets;"
+    db.query(sqlGet,(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+app.get("/booking/api/get",(req,res)=>{
+    const sqlGet="select * from bookings;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
@@ -357,6 +367,8 @@ app.put("/ticket/api/update/:id",(req,res)=>{
 })
 
 
+
+
 //login
 app.post("/login",(req,res)=>{
     const username=req.body.username;
@@ -373,6 +385,211 @@ app.post("/login",(req,res)=>{
     })
 })
 
+
+app.post("/customerlogin",(req,res)=>{
+    const username=req.body.email;
+    const password=req.body.password;
+    db.query('select * from clients where email=? and password=?',[username,password],(err,result)=>{
+        if(err)
+        res.send({err: err})
+        if(result.length>0)
+        res.send(result);
+        else
+        {
+            res.send({msg: 'Invalid Customer Login'})
+        }
+    })
+})
+
+
+app.post("/getcustomerlogin",(req,res)=>{
+    const username=req.body.email;
+    const password=req.body.password;
+    
+    db.query('select client_id from clients where email=? and password=?',[username,password],(err,result)=>{
+        if(err)
+        res.send({err: err})
+        if(result.length>0)
+        res.send(result);
+        else
+        {
+            res.send({msg: 'Invalid Customer Login'})
+        }
+    })
+})
+
+
+app.post("/signup",(req,res)=>{
+    const fname=req.body.fname;
+    const mname=req.body.mname;
+    const lname=req.body.lname;
+    const phone=req.body.phone;
+    const email=req.body.email;
+    const passport=req.body.passport;
+    const password=req.body.password;
+    db.query('insert into clients (fname,mname,lname,phone,email,passport,password) values(?,?,?,?,?,?,?);',[fname,mname,lname,phone,email,passport,password],(err,result)=>{
+        if(err)
+        res.send({err: 'error'})
+    })
+})
+
+app.get("/CustomerPanel/:id",(req,res)=>{
+    const {id}=req.params;
+    const sqlGet="select fname from clients where client_id=?;"
+    db.query(sqlGet,id,(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+
+app.post('/BookTicket',(req,res)=>{
+
+    const departure=req.body.departure;
+    const arrival=req.body.arrival;
+    const departureDate=req.body.departureDate;
+    const returnDate=req.body.returnDate;
+    const classs=req.body.class;
+    const price=req.body.price;
+    const sqlInsert='insert into FlightBooking (departure,arrival,departureDate,returnDate,class,price) values (?,?,?,?,?,?)';
+    db.query(sqlInsert,[departure,arrival,departureDate,returnDate,classs,price],(err,result)=>{
+        if(err)
+        res.send({err:err});
+    })
+})
+
+
+app.get("/SearchFlights",(req,res)=>{
+    const sqlGet="select fb_id,departure,arrival,departureDate, returnDate, class,price from FlightBooking;"
+    db.query(sqlGet,(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+app.delete('/removeSearch',(req,res)=>{
+    const sqlRemove='delete from FlightBooking';
+    db.query(sqlRemove,(err,result)=>{
+        if(err)
+        res.send({err:err});
+    })
+})
+
+app.post("/AvailableFlights",(req,res)=>{
+    const departureDate=req.body.departureDate;
+    const returnDate=req.body.returnDate;
+    console.log(departureDate);
+    console.log(returnDate);
+
+    const sqlGet="select f.flight_no,s.schedule_id,f.airplane_id,a.max_seats,s.departure_time, s.arrival_time, fs.status,f.fares from Flight f inner join schedule s on s.schedule_id=f.schedule_id inner join FlightStatus fs on fs.flightStatus_id=f.flightStatus_id inner join airplane a on a.airplane_id=f.airplane_id where s.departure_time like  ? and s.arrival_time like ?;"
+    db.query(sqlGet,[departureDate+'%',returnDate+'%'],(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+app.post("/UpdateFlightBooking",(req,res)=>{
+    const id=req.body.id;
+
+    const sqlUpdate="update FlightBooking set flight_no=(select f.flight_no from Flight f inner join schedule s on s.schedule_id=f.schedule_id where s.schedule_id=?) where flight_no is null;"
+    db.query(sqlUpdate,id,(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+app.get("/invoice/:id",(req,res)=>{
+    const {id}=req.params;
+    const sqlGet="select fname,lname from clients where client_id=?;"
+    db.query(sqlGet,id,(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+
+app.get("/invoicefares",(req,res)=>{
+    const sqlGet="select flight_no,departure,price from FlightBooking;"
+    db.query(sqlGet,(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+
+app.post("/invoiceconfirm",(req,res)=>{
+    const id=req.body.id;
+    const departure=req.body.departure;
+    console.log(id,departure);
+    const sqlInsert="insert into ticket (seat_no,departure_time,gate_no,airport_code) select t.nm,s.departure_time,a.gate_no,a.airport_code from schedule s, tempseatgen t,airport a where s.schedule_id=? and a.airport_name=? order by rand() limit 1;"
+    db.query(sqlInsert,[id,departure],(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+app.post("/invoiceconfirmAgain",(req,res)=>{
+    const client_id=req.body.id;
+    const flight_no=String(req.body.flight_no);
+    const fares=req.body.fares;
+    console.log(client_id,flight_no,fares);
+
+    const sqlGet="update booking set client_id=?,flight_no=?,fares=? where client_id is null and flight_no is null and fares is null;"
+    db.query(sqlGet,[client_id,flight_no,fares],(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+app.get("/showPass/:id",(req,res)=>{
+    const {id}=req.params;
+    const sqlGet="select c.fname,c.lname,b.airport_code,b.flight_no,a.gate_no, t.seat_no,t.departure_time from booking b inner join clients c on c.client_id=b.client_id inner join airport a on a.airport_code=b.airport_code inner join ticket t on t.ticket_id=b.ticket_id where c.client_id=?;"
+    db.query(sqlGet,id,(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+
+app.post("/addreview/:id",(req,res)=>{
+    const id=req.body.id;
+    const review=req.body.review;
+    const sqlInsert="insert into customer_review values(?,?);"
+    db.query(sqlInsert,[id,review],(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+app.get("/getreview",(req,res)=>{
+    const sqlGet="select c.fname,c.lname,cr.review from customer_review cr inner join clients c on c.client_id=cr.client_id;;"
+    db.query(sqlGet,(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
 
 app.listen(5000, ()=>{
     console.log("Server is running on port 5000!");

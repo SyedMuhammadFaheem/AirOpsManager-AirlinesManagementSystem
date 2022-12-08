@@ -35,6 +35,9 @@ const Sidebar=() => {
       <Link className="menu-item" to="/Ticket">
         Ticket
       </Link>
+      <Link className="menu-item" to="/Booking">
+        Booking
+      </Link>
     </Menu>
   );
 };

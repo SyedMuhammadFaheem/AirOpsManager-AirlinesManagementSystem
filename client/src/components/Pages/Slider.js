@@ -11,31 +11,31 @@ function Slider() {
           alt="First slide"
         />
         <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+          <h3 ><strong style={{fontSize: '40px'}}>Fly to Qatar with FAST Airways</strong></h3>
+          <p>Be there at the Wordlcup 2022 with FAST Airways and cheer your team to victory.</p>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item interval={500} className={classes.item}>
         <img
           className={classes.image}
-          src={require('../../images/slide2.jpg')}
+          src={require('../../images/slider1.jpg')}
           alt="Second slide"
         />
         <Carousel.Caption>
-          <h3>Second slide label</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <h3 ><strong style={{fontSize: '40px'}}>Discover the wonders of the world</strong></h3>
+          <p>Journey with us on a unique adventure to discover the world</p>
         </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item interval={500} className={classes.item}>
         <img
           className={classes.image}
-          src={require('../../images/slide1.jpg')}
+          src={require('../../images/slider2.jpg')}
           alt="Third slide"
         />
         <Carousel.Caption>
-          <h3>Third slide label</h3>
+        <h3 ><strong style={{fontSize: '40px'}}>Extra legroom, extra space, extra easy</strong></h3>
           <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+          Pick from a choice of extras to make flying with us even more comfortable and convenient.
           </p>
         </Carousel.Caption>
       </Carousel.Item>
