@@ -1,6 +1,9 @@
 .bg-image{
     background-image: url('../../../images/pexels-ahmed-muntasir-912050.jpg');
-    background-repeat: no-repeat;
+    background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
     width:100vw;
     height:100vh;
   }

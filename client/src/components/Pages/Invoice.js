@@ -36,16 +36,15 @@ const Invoice = () => {
     loadData();
   }, []);
   const foo = async () => {
-    Axios.post("http://localhost:5000/invoiceconfirm", {
+    await Axios.post("http://localhost:5000/invoiceconfirm", {
       id: initialState.sc_id,
       departure: user.departure,
     });
-    const res = await Axios.post("http://localhost:5000/invoiceconfirmAgain", {
+    await Axios.post("http://localhost:5000/invoiceconfirmAgain", {
       id: initialState.cl_id,
       flight_no: user.flight_no,
       fares: user.price.substr(2, 6),
     });
-    console.log(res.data);
     Axios.delete('http://localhost:5000/removeSearch');
     Swal.fire("Ticket Booked Successfully!", "", "success");
     setTimeout(() => history.push(`/BoardingPass/${id.slice(2, 4)}`), 500);

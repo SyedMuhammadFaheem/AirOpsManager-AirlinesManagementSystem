@@ -1,13 +1,4 @@
 import React from "react";
-import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBCardImage,
-  MDBBtn,
-  MDBRipple,
-} from "mdb-react-ui-kit";
 import "./styles/Home.css";
 import Slider from "./Slider";
 import Footer from "./Footer";

@@ -30,6 +30,7 @@ const AvailableFlights = () => {
     const Returnresponse=await Axios.post("http://localhost:5000/AvailableFlights",{
       departureDate:initialState.departureDate,
       returnDate:initialState.returnDate,
+      fares:initialState.price,
     });
     console.log(Returnresponse.data)
     setData(Returnresponse.data)

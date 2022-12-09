@@ -170,7 +170,7 @@ const BoardingPass = () => {
       </div>
       <div>
         <Link to={`/CustomerPanel/${id}`}>
-            <button className="btn btn-primary" style={{marginLeft:'57.5vw',marginTop:'24vw'}}>Back to Main</button>
+            <button className="btn btn-primary" style={{marginLeft:'57.5vw',marginTop:'62vh'}}>Back to Main</button>
         </Link>
       </div>
     </div>

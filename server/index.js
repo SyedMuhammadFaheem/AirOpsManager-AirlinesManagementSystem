@@ -482,11 +482,13 @@ app.delete('/removeSearch',(req,res)=>{
 app.post("/AvailableFlights",(req,res)=>{
     const departureDate=req.body.departureDate;
     const returnDate=req.body.returnDate;
+    const fares=req.body.fares;
     console.log(departureDate);
     console.log(returnDate);
+    console.log(fares.slice(2,6));
 
-    const sqlGet="select f.flight_no,s.schedule_id,f.airplane_id,a.max_seats,s.departure_time, s.arrival_time, fs.status,f.fares from Flight f inner join schedule s on s.schedule_id=f.schedule_id inner join FlightStatus fs on fs.flightStatus_id=f.flightStatus_id inner join airplane a on a.airplane_id=f.airplane_id where s.departure_time like  ? and s.arrival_time like ?;"
-    db.query(sqlGet,[departureDate+'%',returnDate+'%'],(err,result)=>{
+    const sqlGet="select f.flight_no,s.schedule_id,f.airplane_id,a.max_seats,s.departure_time, s.arrival_time, fs.status,f.fares from Flight f inner join schedule s on s.schedule_id=f.schedule_id inner join FlightStatus fs on fs.flightStatus_id=f.flightStatus_id inner join airplane a on a.airplane_id=f.airplane_id where s.departure_time like  ? and s.arrival_time like ? and f.fares=?;"
+    db.query(sqlGet,[departureDate+'%',returnDate+'%',fares.slice(2,6)],(err,result)=>{
         if(err)
         res.send({err: err});
         else
@@ -572,6 +574,7 @@ app.get("/showPass/:id",(req,res)=>{
 app.post("/addreview/:id",(req,res)=>{
     const id=req.body.id;
     const review=req.body.review;
+    console.log(id,review)
     const sqlInsert="insert into customer_review values(?,?);"
     db.query(sqlInsert,[id,review],(err,result)=>{
         if(err)
@@ -583,6 +586,17 @@ app.post("/addreview/:id",(req,res)=>{
 
 app.get("/getreview",(req,res)=>{
     const sqlGet="select c.fname,c.lname,cr.review from customer_review cr inner join clients c on c.client_id=cr.client_id;;"
+    db.query(sqlGet,(err,result)=>{
+        if(err)
+        res.send({err: err});
+        else
+        res.send(result);
+    })
+})
+
+
+app.get("/getstats",(req,res)=>{
+    const sqlGet="select count(client_id) as countt,sum(fares) as summ from booking;"
     db.query(sqlGet,(err,result)=>{
         if(err)
         res.send({err: err});
