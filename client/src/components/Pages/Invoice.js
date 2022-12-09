@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import Axios from "axios";
 import "./styles/Invoice.css";
-import Swal from 'sweetalert2'
+import Swall from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 const initialState = {
   sc_id: "",
   cl_id: "",
   price: "",
 };
 const Invoice = () => {
-  Swal=withReactContent(Swal)
+  const Swal=withReactContent(Swall)
   const { id } = useParams();
   const [data, setData] = useState({});
   const [user, setUser] = useState({});
@@ -29,7 +30,7 @@ const Invoice = () => {
     Axios.post("http://localhost:5000/UpdateFlightBooking",{
         id:initialState.sc_id,
     })
-    Axios.get(`http://localhost:5000/invoice/${id}`).then((resp) =>
+    Axios.get(`http://localhost:5000/invoice/${initialState.cl_id}`).then((resp) =>
       setData({ ...resp.data[0] })
     );
     loadData();

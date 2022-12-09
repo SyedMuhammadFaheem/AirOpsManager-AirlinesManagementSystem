@@ -58,7 +58,7 @@ const ViewProfile = () => {
                       <Link to={`/CustomerPanel/${id}`}>
                         <button
                           className="flex-grow-0 btn "
-                          style={{ fontSize: "20px"}}
+                          style={{ fontSize: "20px", backgroundColor:'blue',color:'white'}}
                         >
                           Back to Main
                         </button>
