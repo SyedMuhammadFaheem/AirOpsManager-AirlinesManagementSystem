@@ -4,7 +4,7 @@ import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css"
 import 'react-toastify/dist/ReactToastify.css';
 import Home from "./components/Pages/Home";
-import Contact from "./components/Pages/Contact"
+//import Contact from "./components/Pages/Contact"
 import About from './components/Pages/About'
 import Signin from './components/Pages/Signin'
 import Signup from "./components/Pages/Signup";
@@ -93,7 +93,7 @@ function App() {
           <Route exact path='/' component={Home}/>
           <Route path='/BookTicket' component={BookTicket}/>
           <Route path='/about' component={About}/>
-          <Route path='/contact-us' component={Contact}/>
+          {/* <Route path='/contact-us' component={Contact}/> */}
           </>
         </Switch>
     </BrowserRouter>

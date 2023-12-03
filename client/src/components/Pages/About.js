@@ -47,23 +47,23 @@ const About = () => {
 
         <div className="row mt-4">
           <div className="col-lg-6 d-flex align-items-center justify-content-center">
-            <p style={{ fontSize: "25px", marginLeft: "10px" }}>
+            {/* <p style={{ fontSize: "25px", marginLeft: "10px" }}>
               Our focus is on your overall well-being, offering luxurious flights at minimal costs. We provide state-of-the-art facilities in all our airways.
-            </p>
+            </p> */}
             <br />
             <div className="row">
               <div className="col-lg-1">
                 <img
                   src={require("../../images/nc1.png")}
-                  height="80px"
-                  width="70px"
+                  height="50px"
+                  width="50px"
                 />
               </div>
               <div className="col-lg-6">
                 {" "}
-                <b style={{ fontSize: "25px" }}>Our Missions</b>
+                <b style={{ fontSize: "25px" , paddingLeft : "10px"}}>Our Missions</b>
                 <br />
-                <p style={{ fontSize: "20px" }}>
+                <p style={{ fontSize: "20px" , paddingLeft : "10px"}}>
                   To make our flights easy, comfortable, and reliable for you
                 </p>
               </div>
@@ -74,15 +74,15 @@ const About = () => {
               <div className="col-lg-1">
                 <img
                   src={require("../../images/nc4.png")}
-                  height="65px"
-                  width="70px"
+                  height="50px"
+                  width="50px"
                 />
               </div>
               <div className="col-lg-6">
                 {" "}
-                <b style={{ fontSize: "25px" }}>Professionals in our Airways</b>
+                <b style={{ fontSize: "25px" , paddingLeft : "20px"}}>High Standards</b>
                 <br />
-                <p style={{ fontSize: "20px" }}>
+                <p style={{ fontSize: "20px" , paddingLeft : "20px"}}>
                   Providing high-class facilities for every journey
                 </p>
               </div>
