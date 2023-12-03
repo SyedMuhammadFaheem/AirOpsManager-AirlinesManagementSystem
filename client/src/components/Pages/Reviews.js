@@ -8,7 +8,7 @@ const Reviews = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/reviews/api/get');
+    const response= await Axios.get('http://localhost:3000/reviews/api/get');
     setData(response.data);
   }
 

@@ -8,7 +8,7 @@ const Ticket = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/ticket/api/get');
+    const response= await Axios.get('http://localhost:3000/ticket/api/get');
     setData(response.data);
   }
 

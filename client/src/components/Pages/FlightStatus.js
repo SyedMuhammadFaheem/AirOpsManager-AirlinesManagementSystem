@@ -8,7 +8,7 @@ const FlightStatus = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/flightStatus/api/get');
+    const response= await Axios.get('http://localhost:3000/flightStatus/api/get');
     setData(response.data);
   }
 

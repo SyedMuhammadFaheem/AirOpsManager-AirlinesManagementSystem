@@ -16,7 +16,7 @@ const ViewProfile = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
   useEffect(() => {
-    Axios.get(`http://localhost:5000/api/get/${id}`).then((resp) =>
+    Axios.get(`http://localhost:3000/api/get/${id}`).then((resp) =>
       setData({ ...resp.data[0] })
     );
   }, []);

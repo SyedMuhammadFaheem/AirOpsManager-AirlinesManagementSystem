@@ -17,7 +17,7 @@ const Invoice = () => {
   const history = useHistory();
   const loadData = async () => {
     const Returnresponse = await Axios.get(
-      "http://localhost:5000/invoicefares"
+      "http://localhost:3000/invoicefares"
     );
     setUser(Returnresponse.data[0]);
     
@@ -27,25 +27,25 @@ const Invoice = () => {
   useEffect(() => {
     initialState.sc_id = id.slice(0, 2);
     initialState.cl_id = id.slice(2, 4);
-    Axios.post("http://localhost:5000/UpdateFlightBooking",{
+    Axios.post("http://localhost:3000/UpdateFlightBooking",{
         id:initialState.sc_id,
     })
-    Axios.get(`http://localhost:5000/invoice/${initialState.cl_id}`).then((resp) =>
+    Axios.get(`http://localhost:3000/invoice/${initialState.cl_id}`).then((resp) =>
       setData({ ...resp.data[0] })
     );
     loadData();
   }, []);
   const foo = async () => {
-    await Axios.post("http://localhost:5000/invoiceconfirm", {
+    await Axios.post("http://localhost:3000/invoiceconfirm", {
       id: initialState.sc_id,
       departure: user.departure,
     });
-    await Axios.post("http://localhost:5000/invoiceconfirmAgain", {
+    await Axios.post("http://localhost:3000/invoiceconfirmAgain", {
       id: initialState.cl_id,
       flight_no: user.flight_no,
       fares: user.price.substr(2, 6),
     });
-    Axios.delete('http://localhost:5000/removeSearch');
+    Axios.delete('http://localhost:3000/removeSearch');
     Swal.fire("Ticket Booked Successfully!", "", "success");
     setTimeout(() => history.push(`/BoardingPass/${id.slice(2, 4)}`), 500);
   };

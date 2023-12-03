@@ -9,7 +9,7 @@ const Schedule = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/schedule/api/get');
+    const response= await Axios.get('http://localhost:3000/schedule/api/get');
     setData(response.data);
   }
 
@@ -22,7 +22,7 @@ const Schedule = () => {
     console.log(id)
     if(window.confirm('Do you really want to delete Schedule with Schedule ID '+ id +'?'))
     {
-      Axios.delete(`http://localhost:5000/schedule/api/remove/${id}`);
+      Axios.delete(`http://localhost:3000/schedule/api/remove/${id}`);
       toast.success('Schedule deleted successfully!');
       setTimeout(()=> loadData(),500);
     }

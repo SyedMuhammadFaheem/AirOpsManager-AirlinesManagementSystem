@@ -16,7 +16,7 @@ const AvailableFlights = () => {
   const [data, setData] = useState([]);
 
   const loadData = async () => {
-    const response = await Axios.get("http://localhost:5000/SearchFlights");
+    const response = await Axios.get("http://localhost:3000/SearchFlights");
     initialState.fb_id=response.data[0].fb_id;
     initialState.departure=response.data[0].departure;
     initialState.arrival=response.data[0].arrival;
@@ -27,7 +27,7 @@ const AvailableFlights = () => {
     console.log('fb_id: ' + initialState.fb_id)
 
     console.log('return: ' + initialState.returnDate)
-    const Returnresponse=await Axios.post("http://localhost:5000/AvailableFlights",{
+    const Returnresponse=await Axios.post("http://localhost:3000/AvailableFlights",{
       departureDate:initialState.departureDate,
       returnDate:initialState.returnDate,
       fares:initialState.price,

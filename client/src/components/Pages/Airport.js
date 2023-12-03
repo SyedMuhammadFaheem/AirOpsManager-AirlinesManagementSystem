@@ -8,7 +8,7 @@ const Airport = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/airport/api/get');
+    const response= await Axios.get('http://localhost:3000/airport/api/get');
     setData(response.data);
   }
 

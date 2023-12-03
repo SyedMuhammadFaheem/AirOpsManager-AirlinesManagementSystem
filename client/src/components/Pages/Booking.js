@@ -1,15 +1,13 @@
 import React from 'react'
 import {useState,useEffect} from 'react';
-import {Link} from 'react-router-dom';
 import Axios from 'axios';
-import {toast} from 'react-toastify';
 import Sidebar from './Sidebar';
 import './styles/Tables.css'
 const Booking = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/booking/api/get');
+    const response= await Axios.get('http://localhost:3000/booking/api/get');
     setData(response.data);
   }
 

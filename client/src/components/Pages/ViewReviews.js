@@ -8,7 +8,7 @@ const ViewReviews = () => {
   const {id}=useParams();
   useEffect(() => {
     Axios
-      .get(`http://localhost:5000/reviews/api/get/${id}`)
+      .get(`http://localhost:3000/reviews/api/get/${id}`)
       .then((resp) => setUser({ ...resp.data[0] }));
   }, [id]);
   return (

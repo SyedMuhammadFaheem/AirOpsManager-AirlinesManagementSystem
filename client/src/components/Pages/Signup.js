@@ -108,7 +108,7 @@ class Signup extends Component {
     else
     {
 
-      Axios.post("http://localhost:5000/signup", {
+      Axios.post("http://localhost:3000/signup", {
         fname: this.state.fname,
         mname: this.state.mname,
         lname: this.state.lname,
@@ -138,7 +138,7 @@ class Signup extends Component {
                 type="username"
                 required
                 className="form-control mt-1"
-                placeholder="e.g Jane"
+                placeholder="e.g Daisy"
                 onChange={this.handleFname} style={{width:'320px'}}
               />
             </div>
@@ -148,7 +148,7 @@ class Signup extends Component {
                 type="username"
                 required
                 className="form-control mt-1"
-                placeholder="e.g Doe"
+                placeholder="e.g brook"
                 onChange={this.handleMname} style={{width:'320px'}}
               />
             </div>
@@ -158,7 +158,7 @@ class Signup extends Component {
                 type="username"
                 required
                 className="form-control mt-1"
-                placeholder="e.g Smith"
+                placeholder="e.g jenner"
                 onChange={this.handleLname} style={{width:'320px'}}
               />
             </div>
@@ -168,7 +168,7 @@ class Signup extends Component {
                 type="tel"
                 required
                 className="form-control mt-1"
-                placeholder="e.g 923312613326"
+                placeholder="e.g 923171234567"
                 onChange={this.handlePhone} style={{width:'320px'}}
               />
             </div>
@@ -178,7 +178,7 @@ class Signup extends Component {
                 type="email"
                 required
                 className="form-control mt-1"
-                placeholder="e.g John@example.com"
+                placeholder="e.g lily@example.com"
                 onChange={this.handleEmail} style={{width:'320px'}}
               />
             </div>
@@ -198,7 +198,7 @@ class Signup extends Component {
                 type="password"
                 required
                 className="form-control mt-1"
-                placeholder="e.g rXhAz29$%1"
+                placeholder="e.g H$*#&ArM"
                 onChange={this.handlePasswordChange} style={{width:'320px'}}
               />
             </div>
@@ -220,7 +220,7 @@ class Signup extends Component {
             <p className="forgot-password text-right mt-2">
               Already have an account?{" "}
               <Link to="/CustomerSignin">
-                <a> Login</a>
+                <a href = ""> Login</a>
               </Link>
             </p>
           </div>

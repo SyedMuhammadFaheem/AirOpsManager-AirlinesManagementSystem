@@ -19,7 +19,7 @@ const EditTicket = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    Axios.get(`http://localhost:5000/ticket/api/get/${id}`).then((resp) =>
+    Axios.get(`http://localhost:3000/ticket/api/get/${id}`).then((resp) =>
       setState({ ...resp.data[0] })
     );
   }, [id]);
@@ -29,7 +29,7 @@ const EditTicket = () => {
     if (!ticket_id || !seat_no || !departure_time || !gate_no || !airport_code)
       toast.error("Required Fields are empty");
     else {
-      Axios.put(`http://localhost:5000/ticket/api/update/${id}`, {
+      Axios.put(`http://localhost:3000/ticket/api/update/${id}`, {
         ticket_id,
         seat_no,
         departure_time,

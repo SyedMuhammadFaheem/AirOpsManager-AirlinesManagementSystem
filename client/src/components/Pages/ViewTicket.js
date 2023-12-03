@@ -8,7 +8,7 @@ const ViewTicket = () => {
   const {id}=useParams();
   useEffect(() => {
     Axios
-      .get(`http://localhost:5000/ticket/api/get/${id}`)
+      .get(`http://localhost:3000/ticket/api/get/${id}`)
       .then((resp) => setUser({ ...resp.data[0] }));
   }, [id]);
   return (

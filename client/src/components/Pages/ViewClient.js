@@ -8,7 +8,7 @@ const ViewClient = () => {
   const {id}=useParams();
   useEffect(() => {
     Axios
-      .get(`http://localhost:5000/api/get/${id}`)
+      .get(`http://localhost:3000/api/get/${id}`)
       .then((resp) => setUser({ ...resp.data[0] }));
   }, [id]);
   return (

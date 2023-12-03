@@ -9,7 +9,7 @@ const Flight = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/flight/api/get');
+    const response= await Axios.get('http://localhost:3000/flight/api/get');
     setData(response.data);
   }
 
@@ -22,7 +22,7 @@ const Flight = () => {
     console.log(id)
     if(window.confirm('Do you really want to delete Flight with Flight No '+ id +'?'))
     {
-      Axios.delete(`http://localhost:5000/flight/api/remove/${id}`);
+      Axios.delete(`http://localhost:3000/flight/api/remove/${id}`);
       toast.success('Flight deleted successfully!');
       setTimeout(()=> loadData(),500);
     }

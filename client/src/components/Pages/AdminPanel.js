@@ -8,7 +8,7 @@ const AdminPanel = () => {
   const [user,setUser]=useState({});
   useEffect(() => {
     Axios
-      .get('http://localhost:5000/getstats')
+      .get('http://localhost:3000/getstats')
       .then((resp) => setUser({ ...resp.data[0] }));
       console.log(user.countt)
       console.log(user.summ)

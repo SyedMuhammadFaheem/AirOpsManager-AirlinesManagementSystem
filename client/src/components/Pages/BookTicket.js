@@ -1,10 +1,9 @@
 import React from "react";
-import { FaPlaneArrival, FaPlaneDeparture, FaChild } from "react-icons/fa";
-import { GiPerson } from "react-icons/gi";
+import { FaPlaneArrival, FaPlaneDeparture } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import "./styles/BookTicket.css";
 import { useState, useEffect } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import Axios from "axios";
 
 
@@ -20,7 +19,7 @@ const BookTicket = () => {
   const [data, setData] = useState([]);
 
   const loadData = async () => {
-    const response = await Axios.get("http://localhost:5000/airport/api/get");
+    const response = await Axios.get("http://localhost:3000/airport/api/get");
     setData(response.data);
   };
 
@@ -31,7 +30,7 @@ const BookTicket = () => {
   // handle submit
   const onSubmit = (data) => {
     console.log(data.departure);
-    Axios.post("http://localhost:5000/BookTicket", {
+    Axios.post("http://localhost:3000/BookTicket", {
       departure: data.departure,
       arrival: data.arrival,
       departureDate: data.departureDate,

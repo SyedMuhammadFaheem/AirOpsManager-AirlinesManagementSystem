@@ -17,7 +17,7 @@ const AddEditAirplane = () => {
 
   useEffect(() => {
     Axios
-      .get(`http://localhost:5000/airplane/api/get/${id}`)
+      .get(`http://localhost:3000/airplane/api/get/${id}`)
       .then((resp) => setState({ ...resp.data[0] }));
   }, [id]);
 
@@ -33,7 +33,7 @@ const AddEditAirplane = () => {
       {
 
         Axios
-          .post("http://localhost:5000/airplane/api/post", {
+          .post("http://localhost:3000/airplane/api/post", {
             airplane_id,
             max_seats,
           })
@@ -50,7 +50,7 @@ const AddEditAirplane = () => {
       }
       else{
         Axios
-          .put(`http://localhost:5000/airplane/api/update/${id}`, {
+          .put(`http://localhost:3000/airplane/api/update/${id}`, {
             airplane_id,
             max_seats,
           })

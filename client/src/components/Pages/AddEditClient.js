@@ -22,7 +22,7 @@ const AddEditClient = () => {
 
   useEffect(() => {
     Axios
-      .get(`http://localhost:5000/api/get/${id}`)
+      .get(`http://localhost:3000/api/get/${id}`)
       .then((resp) => setState({ ...resp.data[0] }));
   }, [id]);
 
@@ -43,7 +43,7 @@ const AddEditClient = () => {
       {
 
         Axios
-          .post("http://localhost:5000/api/post", {
+          .post("http://localhost:3000/api/post", {
             client_id,
             fname,
             mname,
@@ -70,7 +70,7 @@ const AddEditClient = () => {
       }
       else{
         Axios
-          .put(`http://localhost:5000/api/update/${id}`, {
+          .put(`http://localhost:3000/api/update/${id}`, {
             client_id,
             fname,
             mname,
