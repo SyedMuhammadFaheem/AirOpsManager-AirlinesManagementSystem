@@ -33,7 +33,7 @@ npm start
 
 ### Server
 
-1. Navigate to the `client` directory.
+1. Navigate to the `server` directory.
 
 ```bash
 cd server
