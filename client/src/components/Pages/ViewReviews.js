@@ -1,14 +1,14 @@
 import React,{useState,useEffect} from 'react'
 import {useParams,Link} from 'react-router-dom';
-import Axios from 'axios';
+import apiClient from '../../api/client';
 import './styles/View.css'
 
 const ViewReviews = () => {
   const [user,setUser]=useState({});
   const {id}=useParams();
   useEffect(() => {
-    Axios
-      .get(`http://localhost:5000/reviews/api/get/${id}`)
+    apiClient
+      .get(`/reviews/api/get/${id}`)
       .then((resp) => setUser({ ...resp.data[0] }));
   }, [id]);
   return (

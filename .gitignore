@@ -1,0 +1,23 @@
+# Environment variables — never commit real credentials
+.env
+.env.local
+.env.production
+
+# Dependencies
+node_modules/
+
+# Build artifacts
+build/
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

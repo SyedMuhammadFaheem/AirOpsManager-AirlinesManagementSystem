@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory,Link } from "react-router-dom";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import "./styles/BoardingPass.css";
 const BoardingPass = () => {
   const { id } = useParams();
@@ -8,7 +8,7 @@ const BoardingPass = () => {
   const [user, setUser] = useState({});
   const history = useHistory();
   useEffect(() => {
-    Axios.get(`http://localhost:5000/showPass/${id}`).then((resp) =>
+    apiClient.get(`/booking/showPass/${id}`).then((resp) =>
       setData({ ...resp.data[0] })
     );
   }, []);

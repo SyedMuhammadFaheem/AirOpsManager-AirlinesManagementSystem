@@ -1,7 +1,7 @@
 import React from 'react'
 import {useState,useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import Axios from 'axios';
+import apiClient from '../../api/client';
 import {toast} from 'react-toastify';
 import Sidebar from './Sidebar';
 import './styles/Tables.css'
@@ -9,7 +9,7 @@ const Airplane = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/airplane/api/get');
+    const response= await apiClient.get('/airplane/api/get');
     setData(response.data);
   }
 
@@ -21,7 +21,7 @@ const Airplane = () => {
   const delAirplane=(id)=>{
     if(window.confirm('Do you really want to delete Airplane with Airplane ID '+ id +'?'))
     {
-      Axios.delete(`http://localhost:5000/airplane/api/remove/${id}`);
+      apiClient.delete(`/airplane/api/remove/${id}`);
       toast.success('Airplane deleted successfully!');
       setTimeout(()=> loadData(),500);
     }

@@ -1,14 +1,14 @@
 import React,{useState,useEffect} from 'react'
 import {useParams,Link} from 'react-router-dom';
-import Axios from 'axios';
+import apiClient from '../../api/client';
 import './styles/View.css'
 
 const ViewSchedule = () => {
   const [user,setUser]=useState({});
   const {id}=useParams();
   useEffect(() => {
-    Axios
-      .get(`http://localhost:5000/schedule/api/get/${id}`)
+    apiClient
+      .get(`/schedule/api/get/${id}`)
       .then((resp) => setUser({ ...resp.data[0] }));
   }, [id]);
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
 import "./styles/AddEdit.css";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import { toast } from "react-toastify";
 const initialState = {
   ticket_id: "",
@@ -19,7 +19,7 @@ const EditTicket = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    Axios.get(`http://localhost:5000/ticket/api/get/${id}`).then((resp) =>
+    apiClient.get(`/ticket/api/get/${id}`).then((resp) =>
       setState({ ...resp.data[0] })
     );
   }, [id]);
@@ -29,7 +29,7 @@ const EditTicket = () => {
     if (!ticket_id || !seat_no || !departure_time || !gate_no || !airport_code)
       toast.error("Required Fields are empty");
     else {
-      Axios.put(`http://localhost:5000/ticket/api/update/${id}`, {
+      apiClient.put(`/ticket/api/update/${id}`, {
         ticket_id,
         seat_no,
         departure_time,
