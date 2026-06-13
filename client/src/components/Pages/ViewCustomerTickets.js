@@ -1,15 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams,Link } from "react-router-dom";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import "./styles/Tables.css";
 const ViewCustomerTickets = () => {
   const [data, setData] = useState([]);
   const { id } = useParams();
   const loadData = async () => {
-    const response = await Axios.get(`http://localhost:5000/showPass/${id}`);
+    const response = await apiClient.get(`/booking/showPass/${id}`);
     setData(response.data);
-    console.log(response.data);
   };
 
   useEffect(() => {

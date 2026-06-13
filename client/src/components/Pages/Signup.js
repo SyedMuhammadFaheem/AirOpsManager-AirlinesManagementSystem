@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import "./styles/Signin.css";
 import { withRouter, Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -65,7 +65,6 @@ class Signup extends Component {
     {
         let s=4;
         var text=this.state.password;
-        console.log("text: " + text);
         let result=""
         for (let i = 0; i < text.length; i++)
         {
@@ -87,42 +86,26 @@ class Signup extends Component {
                 })
             }
         }
-        console.log('result: ' + result);
         
-        console.log(this.state.password)
     }
   register = (e) => {
     e.preventDefault();
-    console.log(this.state.fname);
-    console.log(this.state.mname);
-    console.log(this.state.lname);
-    console.log(this.state.phone);
-    console.log(this.state.email);
-    console.log(this.state.passport);
-    console.log(this.state.password);
-    console.log(this.state.confirmPass);
-    console.log(this.state.password);
-    this.encrypt();
-    if(this.state.password!==this.state.confirmPass)
-    Swal.fire("Password doesn't match confirm password!", "", "error");
-    else
-    {
-
-      Axios.post("http://localhost:5000/signup", {
-        fname: this.state.fname,
-        mname: this.state.mname,
-        lname: this.state.lname,
-        phone: this.state.phone,
-        email: this.state.email,
-        passport: this.state.passport,
-        password: this.state.password,
-      }).then((response) => {
-        console.log(response);
-        if (response.data.err) console.log(response.data.err);
-      }).catch((err)=> Swal.fire("Error in Signup!", "", "error"));
-      Swal.fire("Registered Successfully!", "", "success");
-      setTimeout(()=>this.props.history.push("/CustomerSignin"),500);
+    if (this.state.password !== this.state.confirmPass) {
+      Swal.fire("Password doesn't match confirm password!", '', 'error');
+      return;
     }
+    apiClient.post('/auth/signup', {
+      fname: this.state.fname,
+      mname: this.state.mname,
+      lname: this.state.lname,
+      phone: this.state.phone,
+      email: this.state.email,
+      passport: this.state.passport,
+      password: this.state.password,
+    }).then(() => {
+      Swal.fire('Registered Successfully!', '', 'success');
+      setTimeout(() => this.props.history.push('/CustomerSignin'), 500);
+    }).catch(() => Swal.fire('Error in Signup!', '', 'error'));
 
 
   };
@@ -135,7 +118,7 @@ class Signup extends Component {
             <div className="form-group mt-3">
               <label>First Name</label>
               <input
-                type="username"
+                type="text"
                 required
                 className="form-control mt-1"
                 placeholder="e.g Jane"
@@ -145,7 +128,7 @@ class Signup extends Component {
             <div className="form-group mt-3">
               <label>Middle Name</label>
               <input
-                type="username"
+                type="text"
                 required
                 className="form-control mt-1"
                 placeholder="e.g Doe"
@@ -155,7 +138,7 @@ class Signup extends Component {
             <div className="form-group mt-3">
               <label>Last Name</label>
               <input
-                type="username"
+                type="text"
                 required
                 className="form-control mt-1"
                 placeholder="e.g Smith"

@@ -2,7 +2,7 @@ import React from "react";
 import Carousel from "react-bootstrap/Carousel";
 import Footer from "./Footer";
 import {useState,useEffect} from 'react';
-import Axios from 'axios';
+import apiClient from '../../api/client';
 import "./styles/About.css";
 
 const About = () => {
@@ -10,13 +10,13 @@ const About = () => {
   const [data1, setData1] = useState({});
   const [data2, setData2] = useState({});
   useEffect(() => {
-    Axios.get('http://localhost:5000/getreview').then((resp) =>
+    apiClient.get("/reviews/api/getreview").then((resp) =>
       setData({ ...resp.data[0] }),
     );
-    Axios.get('http://localhost:5000/getreview').then((resp) =>
+    apiClient.get("/reviews/api/getreview").then((resp) =>
       setData1({ ...resp.data[1] }),
     );
-    Axios.get('http://localhost:5000/getreview').then((resp) =>
+    apiClient.get("/reviews/api/getreview").then((resp) =>
       setData2({ ...resp.data[2] }),
     );
   }, []);

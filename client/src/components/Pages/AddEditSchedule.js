@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
 import "./styles/AddEdit.css";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import { toast } from "react-toastify";
 const initialState = {
   schedule_id: "",
@@ -18,7 +18,7 @@ const AddEditSchedule = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    Axios.get(`http://localhost:5000/schedule/api/get/${id}`).then((resp) =>
+    apiClient.get(`/schedule/api/get/${id}`).then((resp) =>
       setState({ ...resp.data[0] })
     );
   }, [id]);
@@ -29,7 +29,7 @@ const AddEditSchedule = () => {
       toast.error("Required Fields are empty");
     else {
       if (!id) {
-        Axios.post("http://localhost:5000/api/post", {
+        apiClient.post("/api/post", {
           schedule_id,
           departure_time,
           arrival_time,
@@ -47,7 +47,7 @@ const AddEditSchedule = () => {
           .catch((err) => toast.error(err.response.data));
         toast.success("Schedule Added Successfully");
       } else {
-        Axios.put(`http://localhost:5000/schedule/api/update/${id}`, {
+        apiClient.put(`/schedule/api/update/${id}`, {
             schedule_id,
             departure_time,
             arrival_time,

@@ -1,26 +1,33 @@
-import React,{useState,useEffect} from 'react'
-import Axios from 'axios';
-import Sidebar from './Sidebar'
-import { NavBtn, NavBtnLink } from "../Navbar/NavbarElements";
-import MovingText from "react-moving-text";
+import React, { useState, useEffect } from 'react';
+import apiClient from '../../api/client';
+import Sidebar from './Sidebar';
+import { NavBtn, NavBtnLink } from '../Navbar/NavbarElements';
+import MovingText from 'react-moving-text';
 import './styles/AdminPanel.css';
-const AdminPanel = () => {
-  const [user,setUser]=useState({});
-  useEffect(() => {
-    Axios
-      .get('http://localhost:5000/getstats')
-      .then((resp) => setUser({ ...resp.data[0] }));
-      console.log(user.countt)
-      console.log(user.summ)
-  }, []);
-  return (
-    <div className='bg-image'>
-      <Sidebar/>
+import { useAuth } from '../../contexts/AuthContext';
+import { useHistory } from 'react-router-dom';
 
-      <br/>
-      <br/>
-      <br/>
-      <br/>
+const AdminPanel = () => {
+  const { logout, auth } = useAuth();
+  const history = useHistory();
+  const [stats, setStats] = useState({ countt: 0, summ: 0 });
+
+  useEffect(() => {
+    apiClient
+      .get('/booking/getstats')
+      .then((resp) => setStats(resp.data))
+      .catch(() => {});
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    history.push('/signin');
+  };
+
+  return (
+    <div className="bg-image">
+      <Sidebar />
+      <br /><br /><br /><br />
       <MovingText
         type="popIn"
         duration="1600ms"
@@ -29,20 +36,21 @@ const AdminPanel = () => {
         timing="ease-in"
         iteration="5"
         fillMode="none"
-        >
-        <h1 style={{textAlign:"center", fontSize:"80px", fontWeight:'800', color:'white',backgroundColor:'black',width:'100vw',padding:'10px'}}>Welcome, cynotryl!</h1>
+      >
+        <h1 style={{ textAlign: 'center', fontSize: '80px', fontWeight: '800', color: 'white', backgroundColor: 'black', width: '100vw', padding: '10px' }}>
+          Welcome, {auth.username || 'Admin'}!
+        </h1>
       </MovingText>
-      <br/>
-      <br/>
-      <div style={{backgroundColor:'black', width:'100vw', padding:'10px'}}>
-        <h1 style={{color:'white'}}>Bookings Count: {user.countt}</h1>
-        <h1 style={{color:'white'}}>Revenue Generated: {user.summ}</h1>
+      <br /><br />
+      <div style={{ backgroundColor: 'black', width: '100vw', padding: '10px' }}>
+        <h1 style={{ color: 'white' }}>Bookings Count: {stats.countt}</h1>
+        <h1 style={{ color: 'white' }}>Revenue Generated: {stats.summ}</h1>
       </div>
-      <NavBtn >
-          <NavBtnLink to="/">Logout</NavBtnLink>
-        </NavBtn>
+      <NavBtn>
+        <NavBtnLink as="button" onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</NavBtnLink>
+      </NavBtn>
     </div>
-  )
-}
+  );
+};
 
-export default AdminPanel
+export default AdminPanel;

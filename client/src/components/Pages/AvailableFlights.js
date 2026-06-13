@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import "./styles/Tables.css";
 const initialState={
   fb_id:"",
@@ -16,7 +16,7 @@ const AvailableFlights = () => {
   const [data, setData] = useState([]);
 
   const loadData = async () => {
-    const response = await Axios.get("http://localhost:5000/SearchFlights");
+    const response = await apiClient.get("/SearchFlights");
     initialState.fb_id=response.data[0].fb_id;
     initialState.departure=response.data[0].departure;
     initialState.arrival=response.data[0].arrival;
@@ -24,15 +24,13 @@ const AvailableFlights = () => {
     initialState.returnDate=response.data[0].returnDate;
     initialState.class=response.data[0].class;
     initialState.price=response.data[0].price;
-    console.log('fb_id: ' + initialState.fb_id)
 
-    console.log('return: ' + initialState.returnDate)
-    const Returnresponse=await Axios.post("http://localhost:5000/AvailableFlights",{
+    const faresNumeric = parseInt(initialState.price.replace(/[^0-9]/g, ''), 10);
+    const Returnresponse=await apiClient.post("/AvailableFlights",{
       departureDate:initialState.departureDate,
       returnDate:initialState.returnDate,
-      fares:initialState.price,
+      fares: isNaN(faresNumeric) ? 0 : faresNumeric,
     });
-    console.log(Returnresponse.data)
     setData(Returnresponse.data)
     
   };

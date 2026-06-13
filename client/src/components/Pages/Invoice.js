@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import "./styles/Invoice.css";
 import Swall from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -16,8 +16,8 @@ const Invoice = () => {
   const [user, setUser] = useState({});
   const history = useHistory();
   const loadData = async () => {
-    const Returnresponse = await Axios.get(
-      "http://localhost:5000/invoicefares"
+    const Returnresponse = await apiClient.get(
+      "/invoicefares"
     );
     setUser(Returnresponse.data[0]);
     
@@ -27,25 +27,25 @@ const Invoice = () => {
   useEffect(() => {
     initialState.sc_id = id.slice(0, 2);
     initialState.cl_id = id.slice(2, 4);
-    Axios.post("http://localhost:5000/UpdateFlightBooking",{
+    apiClient.post("/UpdateFlightBooking",{
         id:initialState.sc_id,
     })
-    Axios.get(`http://localhost:5000/invoice/${initialState.cl_id}`).then((resp) =>
+    apiClient.get(`/invoice/${initialState.cl_id}`).then((resp) =>
       setData({ ...resp.data[0] })
     );
     loadData();
   }, []);
   const foo = async () => {
-    await Axios.post("http://localhost:5000/invoiceconfirm", {
+    await apiClient.post("/invoiceconfirm", {
       id: initialState.sc_id,
       departure: user.departure,
     });
-    await Axios.post("http://localhost:5000/invoiceconfirmAgain", {
+    await apiClient.post("/invoiceconfirmAgain", {
       id: initialState.cl_id,
       flight_no: user.flight_no,
       fares: user.price.substr(2, 6),
     });
-    Axios.delete('http://localhost:5000/removeSearch');
+    apiClient.delete('/removeSearch');
     Swal.fire("Ticket Booked Successfully!", "", "success");
     setTimeout(() => history.push(`/BoardingPass/${id.slice(2, 4)}`), 500);
   };

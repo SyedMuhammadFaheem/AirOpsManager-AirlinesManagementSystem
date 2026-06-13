@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import {
   MDBCol,
   MDBContainer,
@@ -16,7 +16,7 @@ const ViewProfile = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
   useEffect(() => {
-    Axios.get(`http://localhost:5000/api/get/${id}`).then((resp) =>
+    apiClient.get(`/api/get/${id}`).then((resp) =>
       setData({ ...resp.data[0] })
     );
   }, []);

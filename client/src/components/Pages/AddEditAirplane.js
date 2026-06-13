@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
 import "./styles/AddEdit.css";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import { toast } from "react-toastify";
 const initialState = {
   airplane_id: "",
@@ -16,8 +16,8 @@ const AddEditAirplane = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    Axios
-      .get(`http://localhost:5000/airplane/api/get/${id}`)
+    apiClient
+      .get(`/airplane/api/get/${id}`)
       .then((resp) => setState({ ...resp.data[0] }));
   }, [id]);
 
@@ -32,38 +32,28 @@ const AddEditAirplane = () => {
       if(!id)
       {
 
-        Axios
-          .post("http://localhost:5000/airplane/api/post", {
+        apiClient
+          .post("/airplane/api/post", {
             airplane_id,
             max_seats,
           })
-          .then((response) => {
-            setState({
-              airplane_id: "",
-              max_seats: "",
-            });
-            if(response.data.err)
-            console.log(response.data.err)
+          .then(() => {
+            setState({ airplane_id: "", max_seats: "" });
+            toast.success('Airplane Added Successfully');
           })
           .catch((err) => toast.error(err.response.data));
-          toast.success('Airplane Added Successfully');
       }
       else{
-        Axios
-          .put(`http://localhost:5000/airplane/api/update/${id}`, {
+        apiClient
+          .put(`/airplane/api/update/${id}`, {
             airplane_id,
             max_seats,
           })
-          .then((response) => {
-            setState({
-              airplane_id: "",
-              max_seats: "",
-            });
-            if(response.data.err)
-            console.log(response.data.err)
+          .then(() => {
+            setState({ airplane_id: "", max_seats: "" });
+            toast.success('Airplane Updated Successfully');
           })
           .catch((err) => toast.error(err.response.data));
-          toast.success('Airplane Updated Successfully');
       }
       setTimeout(() => history.push("/Airplane"), 500);
     }

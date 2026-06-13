@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
 import "./styles/AddEdit.css";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import { toast } from "react-toastify";
 const initialState = {
   client_id: "",
@@ -21,8 +21,8 @@ const AddEditClient = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    Axios
-      .get(`http://localhost:5000/api/get/${id}`)
+    apiClient
+      .get(`/api/get/${id}`)
       .then((resp) => setState({ ...resp.data[0] }));
   }, [id]);
 
@@ -42,8 +42,8 @@ const AddEditClient = () => {
       if(!id)
       {
 
-        Axios
-          .post("http://localhost:5000/api/post", {
+        apiClient
+          .post("/api/post", {
             client_id,
             fname,
             mname,
@@ -52,25 +52,15 @@ const AddEditClient = () => {
             email,
             passport,
           })
-          .then((response) => {
-            setState({
-              client_id: "",
-              fname: "",
-              mname: "",
-              lname: "",
-              phone: "",
-              email: "",
-              passport: "",
-            });
-            if(response.data.err)
-            console.log(response.data.err)
+          .then(() => {
+            setState({ client_id: "", fname: "", mname: "", lname: "", phone: "", email: "", passport: "" });
+            toast.success('Client Added Successfully');
           })
           .catch((err) => toast.error(err.response.data));
-          toast.success('Client Added Successfully');
       }
       else{
-        Axios
-          .put(`http://localhost:5000/api/update/${id}`, {
+        apiClient
+          .put(`/api/update/${id}`, {
             client_id,
             fname,
             mname,
@@ -79,21 +69,11 @@ const AddEditClient = () => {
             email,
             passport,
           })
-          .then((response) => {
-            setState({
-              client_id: "",
-              fname: "",
-              mname: "",
-              lname: "",
-              phone: "",
-              email: "",
-              passport: "",
-            });
-            if(response.data.err)
-            console.log(response.data.err)
+          .then(() => {
+            setState({ client_id: "", fname: "", mname: "", lname: "", phone: "", email: "", passport: "" });
+            toast.success('Client Updated Successfully');
           })
           .catch((err) => toast.error(err.response.data));
-          toast.success('Client Updated Successfully');
       }
       setTimeout(() => history.push("/Client"), 500);
     }

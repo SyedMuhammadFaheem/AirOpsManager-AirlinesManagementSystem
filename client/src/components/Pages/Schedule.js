@@ -1,7 +1,7 @@
 import React from 'react'
 import {useState,useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import Axios from 'axios';
+import apiClient from '../../api/client';
 import {toast} from 'react-toastify';
 import Sidebar from './Sidebar';
 import './styles/Tables.css'
@@ -9,7 +9,7 @@ const Schedule = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/schedule/api/get');
+    const response= await apiClient.get('/schedule/api/get');
     setData(response.data);
   }
 
@@ -19,10 +19,9 @@ const Schedule = () => {
 
 
   const delSchedule=(id)=>{
-    console.log(id)
     if(window.confirm('Do you really want to delete Schedule with Schedule ID '+ id +'?'))
     {
-      Axios.delete(`http://localhost:5000/schedule/api/remove/${id}`);
+      apiClient.delete(`/schedule/api/remove/${id}`);
       toast.success('Schedule deleted successfully!');
       setTimeout(()=> loadData(),500);
     }

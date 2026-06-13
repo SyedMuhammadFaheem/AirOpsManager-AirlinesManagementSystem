@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Axios from "axios";
+import apiClient from '../../api/client';
 import "./styles/Signin.css";
 import { useHistory,useParams } from "react-router-dom";
 import Swale from "sweetalert2";
@@ -21,7 +21,7 @@ const AddReviews = () => {
 
   const Add = (event) => {
     event.preventDefault();
-    Axios.post(`http://localhost:5000/addreview/${id}`, {
+    apiClient.post(`/reviews/api/addreview/${id}`, {
       id:id,
       review:review,
     }).then((response) => {

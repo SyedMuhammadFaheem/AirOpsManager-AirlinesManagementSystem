@@ -1,7 +1,7 @@
 import React from 'react'
 import {useState,useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import Axios from 'axios';
+import apiClient from '../../api/client';
 import {toast} from 'react-toastify';
 import Sidebar from './Sidebar';
 import './styles/Tables.css'
@@ -9,7 +9,7 @@ const Client = () => {
   const [data,setData]=useState([]);
   
   const loadData =async()=>{
-    const response= await Axios.get('http://localhost:5000/api/get');
+    const response= await apiClient.get('/api/get');
     setData(response.data);
   }
 
@@ -19,10 +19,9 @@ const Client = () => {
 
 
   const delClient=(id)=>{
-    console.log(id)
     if(window.confirm('Do you really want to delete Client with Client ID '+ id +'?'))
     {
-      Axios.delete(`http://localhost:5000/api/remove/${id}`);
+      apiClient.delete(`/api/remove/${id}`);
       toast.success('Client deleted successfully!');
       setTimeout(()=> loadData(),500);
     }

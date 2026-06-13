@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import {useParams} from 'react-router-dom';
-import Axios from 'axios';
+import apiClient from '../../api/client';
 import CustomerNavbar from "../CustomerNavbar";
 import MovingText from "react-moving-text";
 import './styles/CustomerPanel.css';
@@ -8,8 +8,8 @@ const CustomerPanel = () => {
   const [user,setUser]=useState({});
   const {id}=useParams();
   useEffect(() => {
-    Axios
-      .get(`http://localhost:5000/CustomerPanel/${id}`)
+    apiClient
+      .get(`/CustomerPanel/${id}`)
       .then((resp) => setUser({ ...resp.data[0] }));
   }, [id]);
   return (

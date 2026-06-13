@@ -1,101 +1,140 @@
-import {Switch,Route, BrowserRouter} from "react-router-dom"; 
-import {ToastContainer} from 'react-toastify';
+import React, { Suspense } from 'react';
+import { Switch, Route, BrowserRouter, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import './App.css';
-import "bootstrap/dist/css/bootstrap.min.css"
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import Home from "./components/Pages/Home";
-import Contact from "./components/Pages/Contact"
-import About from './components/Pages/About'
-import Signin from './components/Pages/Signin'
-import Signup from "./components/Pages/Signup";
-import Client from "./components/Pages/Client";
-import Navbar from "./components/Navbar";
-import AddEditClient from "./components/Pages/AddEditClient";
-import ViewClient from './components/Pages/ViewClient'
-import AdminPanel from "./components/Pages/AdminPanel";
-import AddEditAirplane from "./components/Pages/AddEditAirplane";
-import ViewAirplane from "./components/Pages/ViewAirplane";
-import Airplane from "./components/Pages/Airplane";
-import FlightStatus from "./components/Pages/FlightStatus";
-import ViewFlightStatus from "./components/Pages/ViewFlightStatus";
-import Gates from "./components/Pages/Gates";
-import ViewGates from "./components/Pages/ViewGates";
-import Airport from "./components/Pages/Airport";
-import ViewAirport from "./components/Pages/ViewAirport";
-import Reviews from "./components/Pages/Reviews";
-import ViewReviews from "./components/Pages/ViewReviews";
-import Schedule from "./components/Pages/Schedule";
-import AddEditSchedule from "./components/Pages/AddEditSchedule";
-import ViewSchedule from "./components/Pages/ViewSchedule";
-import AddFlight from "./components/Pages/AddFlight";
-import Flight from "./components/Pages/Flight";
-import ViewFlight from "./components/Pages/ViewFlight";
-import Ticket from "./components/Pages/Ticket";
-import EditTicket from "./components/Pages/EditTicket";
-import ViewTicket from "./components/Pages/ViewTicket";
-import BookTicket from "./components/Pages/BookTicket";
-import AvailableFlights from "./components/Pages/AvailableFlights";
-import CustomerSignin from "./components/Pages/CustomerSignin";
-import CustomerPanel from "./components/Pages/CustomerPanel";
-import ViewProfile from "./components/Pages/ViewProfile";
-import BoardingPass from "./components/Pages/BoardingPass";
-import Invoice from "./components/Pages/Invoice";
-import AddReviews from "./components/Pages/AddReviews";
-import ViewCustomerTickets from "./components/Pages/ViewCustomerTickets";
-import Booking from "./components/Pages/Booking";
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import CustomerRoute from './components/CustomerRoute';
+import Navbar from './components/Navbar';
+
+// Lazy-loaded pages
+const Home               = React.lazy(() => import('./components/Pages/Home'));
+const About              = React.lazy(() => import('./components/Pages/About'));
+const Contact            = React.lazy(() => import('./components/Pages/Contact'));
+const Signin             = React.lazy(() => import('./components/Pages/Signin'));
+const Signup             = React.lazy(() => import('./components/Pages/Signup'));
+const CustomerSignin     = React.lazy(() => import('./components/Pages/CustomerSignin'));
+
+// Admin pages (protected)
+const AdminPanel         = React.lazy(() => import('./components/Pages/AdminPanel'));
+const Client             = React.lazy(() => import('./components/Pages/Client'));
+const AddEditClient      = React.lazy(() => import('./components/Pages/AddEditClient'));
+const ViewClient         = React.lazy(() => import('./components/Pages/ViewClient'));
+const Airplane           = React.lazy(() => import('./components/Pages/Airplane'));
+const AddEditAirplane    = React.lazy(() => import('./components/Pages/AddEditAirplane'));
+const ViewAirplane       = React.lazy(() => import('./components/Pages/ViewAirplane'));
+const FlightStatus       = React.lazy(() => import('./components/Pages/FlightStatus'));
+const ViewFlightStatus   = React.lazy(() => import('./components/Pages/ViewFlightStatus'));
+const Gates              = React.lazy(() => import('./components/Pages/Gates'));
+const ViewGates          = React.lazy(() => import('./components/Pages/ViewGates'));
+const Airport            = React.lazy(() => import('./components/Pages/Airport'));
+const ViewAirport        = React.lazy(() => import('./components/Pages/ViewAirport'));
+const Reviews            = React.lazy(() => import('./components/Pages/Reviews'));
+const ViewReviews        = React.lazy(() => import('./components/Pages/ViewReviews'));
+const Schedule           = React.lazy(() => import('./components/Pages/Schedule'));
+const AddEditSchedule    = React.lazy(() => import('./components/Pages/AddEditSchedule'));
+const ViewSchedule       = React.lazy(() => import('./components/Pages/ViewSchedule'));
+const Flight             = React.lazy(() => import('./components/Pages/Flight'));
+const AddFlight          = React.lazy(() => import('./components/Pages/AddFlight'));
+const ViewFlight         = React.lazy(() => import('./components/Pages/ViewFlight'));
+const Ticket             = React.lazy(() => import('./components/Pages/Ticket'));
+const EditTicket         = React.lazy(() => import('./components/Pages/EditTicket'));
+const ViewTicket         = React.lazy(() => import('./components/Pages/ViewTicket'));
+const Booking            = React.lazy(() => import('./components/Pages/Booking'));
+
+// Customer pages (protected)
+const CustomerPanel      = React.lazy(() => import('./components/Pages/CustomerPanel'));
+const ViewProfile        = React.lazy(() => import('./components/Pages/ViewProfile'));
+const BookTicket         = React.lazy(() => import('./components/Pages/BookTicket'));
+const AvailableFlights   = React.lazy(() => import('./components/Pages/AvailableFlights'));
+const BoardingPass       = React.lazy(() => import('./components/Pages/BoardingPass'));
+const Invoice            = React.lazy(() => import('./components/Pages/Invoice'));
+const AddReviews         = React.lazy(() => import('./components/Pages/AddReviews'));
+const ViewCustomerTickets = React.lazy(() => import('./components/Pages/ViewCustomerTickets'));
+
+// Routes where the public Navbar should not appear
+const NO_NAVBAR_PATHS = [
+  '/AdminPanel', '/Client', '/Airplane', '/FlightStatus', '/Gates', '/Airport',
+  '/Reviews', '/Schedule', '/Flight', '/Ticket', '/Booking',
+  '/AddEditClient', '/AddEditAirplane', '/AddEditSchedule', '/AddFlight', '/EditTicket',
+  '/Update/', '/UpdateAirplane/', '/UpdateSchedule/', '/View/', '/ViewAirplane/',
+  '/ViewFlightStatus/', '/ViewGates/', '/ViewAirport/', '/ViewReviews/', '/ViewSchedule/',
+  '/ViewFlight/', '/ViewTicket/', '/CustomerPanel/', '/ViewProfile/', '/BoardingPass/',
+  '/Invoice/', '/AddReviews/', '/ViewCustomerTickets/', '/AvailableFlights/',
+];
+
+function AppRoutes() {
+  const location = useLocation();
+  const showNavbar = !NO_NAVBAR_PATHS.some((p) => location.pathname.startsWith(p));
+
+  return (
+    <>
+      <ToastContainer position="top-center" />
+      {showNavbar && <Navbar />}
+      <Suspense fallback={<div className="d-flex justify-content-center mt-5"><div className="spinner-border" /></div>}>
+        <Switch>
+          {/* Public routes */}
+          <Route exact path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/contact-us" component={Contact} />
+          <Route path="/signin" component={Signin} />
+          <Route path="/sign-up" component={Signup} />
+          <Route path="/CustomerSignin" component={CustomerSignin} />
+          <Route path="/BookTicket" component={BookTicket} />
+
+          {/* Admin-protected routes */}
+          <ProtectedRoute path="/AdminPanel" component={AdminPanel} />
+          <ProtectedRoute path="/Client" component={Client} />
+          <ProtectedRoute path="/AddEditClient" component={AddEditClient} />
+          <ProtectedRoute path="/Update/:id" component={AddEditClient} />
+          <ProtectedRoute path="/View/:id" component={ViewClient} />
+          <ProtectedRoute path="/Airplane" component={Airplane} />
+          <ProtectedRoute path="/AddEditAirplane" component={AddEditAirplane} />
+          <ProtectedRoute path="/UpdateAirplane/:id" component={AddEditAirplane} />
+          <ProtectedRoute path="/ViewAirplane/:id" component={ViewAirplane} />
+          <ProtectedRoute path="/FlightStatus" component={FlightStatus} />
+          <ProtectedRoute path="/ViewFlightStatus/:id" component={ViewFlightStatus} />
+          <ProtectedRoute path="/Gates" component={Gates} />
+          <ProtectedRoute path="/ViewGates/:id" component={ViewGates} />
+          <ProtectedRoute path="/Airport" component={Airport} />
+          <ProtectedRoute path="/ViewAirport/:id" component={ViewAirport} />
+          <ProtectedRoute path="/Reviews" component={Reviews} />
+          <ProtectedRoute path="/ViewReviews/:id" component={ViewReviews} />
+          <ProtectedRoute path="/Schedule" component={Schedule} />
+          <ProtectedRoute path="/AddEditSchedule" component={AddEditSchedule} />
+          <ProtectedRoute path="/UpdateSchedule/:id" component={AddEditSchedule} />
+          <ProtectedRoute path="/ViewSchedule/:id" component={ViewSchedule} />
+          <ProtectedRoute path="/Flight" component={Flight} />
+          <ProtectedRoute path="/AddFlight" component={AddFlight} />
+          <ProtectedRoute path="/ViewFlight/:id" component={ViewFlight} />
+          <ProtectedRoute path="/Ticket" component={Ticket} />
+          <ProtectedRoute path="/EditTicket" component={EditTicket} />
+          <ProtectedRoute path="/ViewTicket/:id" component={ViewTicket} />
+          <ProtectedRoute path="/Booking" component={Booking} />
+
+          {/* Customer-protected routes */}
+          <CustomerRoute path="/CustomerPanel/:id" component={CustomerPanel} />
+          <CustomerRoute path="/ViewProfile/:id" component={ViewProfile} />
+          <CustomerRoute path="/BookTicket/:id" component={BookTicket} />
+          <CustomerRoute path="/AvailableFlights/:id" component={AvailableFlights} />
+          <CustomerRoute path="/BoardingPass/:id" component={BoardingPass} />
+          <CustomerRoute path="/Invoice/:id" component={Invoice} />
+          <CustomerRoute path="/AddReviews/:id" component={AddReviews} />
+          <CustomerRoute path="/ViewCustomerTickets/:id" component={ViewCustomerTickets} />
+        </Switch>
+      </Suspense>
+    </>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
-        <ToastContainer position='top-center'/>
-        <Switch>
-          <Route path='/signin' component={Signin}/>
-          <Route path='/sign-up' component={Signup}/>
-          <Route path='/Client' component={Client}/>
-          <Route path='/AvailableFlights/:id' component={AvailableFlights}/>
-          <Route path='/AdminPanel' component={AdminPanel}/>
-          <Route path='/AddEditClient' component={AddEditClient}/>
-          <Route path='/Update/:id' component={AddEditClient}/>
-          <Route path='/View/:id' component={ViewClient}/>
-          <Route path='/Airplane' component={Airplane}/>
-          <Route path='/AddEditAirplane' component={AddEditAirplane}/>
-          <Route path='/UpdateAirplane/:id' component={AddEditAirplane}/>
-          <Route path='/ViewAirplane/:id' component={ViewAirplane}/>
-          <Route path='/FlightStatus' component={FlightStatus}/>
-          <Route path='/ViewFlightStatus/:id' component={ViewFlightStatus}/>
-          <Route path='/Gates' component={Gates}/>
-          <Route path='/ViewGates/:id' component={ViewGates}/>
-          <Route path='/Airport' component={Airport}/>
-          <Route path='/ViewAirport/:id' component={ViewAirport}/>
-          <Route path='/Reviews' component={Reviews}/>
-          <Route path='/ViewReviews/:id' component={ViewReviews}/>
-          <Route path='/Schedule' component={Schedule}/>
-          <Route path='/AddEditSchedule' component={AddEditSchedule}/>
-          <Route path='/UpdateSchedule/:id' component={AddEditSchedule}/>
-          <Route path='/ViewSchedule/:id' component={ViewSchedule}/>
-          <Route path='/Flight' component={Flight}/>
-          <Route path='/AddFlight' component={AddFlight}/>
-          <Route path='/ViewFlight/:id' component={ViewFlight}/>
-          <Route path='/Ticket' component={Ticket}/>
-          <Route path='/EditTicket' component={EditTicket}/>
-          <Route path='/ViewTicket/:id' component={ViewTicket}/>
-          <Route path='/CustomerSignin' component={CustomerSignin}/>
-          <Route path='/CustomerPanel/:id' component={CustomerPanel}/>
-          <Route path='/ViewProfile/:id' component={ViewProfile}/>
-          <Route path='/CustomerPanel/:id' component={CustomerPanel}/>
-          <Route path='/BookTicket/:id' component={BookTicket}/>
-          <Route path='/BoardingPass/:id' component={BoardingPass}/>
-          <Route path='/Invoice/:id' component={Invoice}/>
-          <Route path='/AddReviews/:id' component={AddReviews}/>
-          <Route path='/ViewCustomerTickets/:id' component={ViewCustomerTickets}/>
-          <Route path='/Booking' component={Booking}/>
-          <>
-          <Navbar/>
-          <Route exact path='/' component={Home}/>
-          <Route path='/BookTicket' component={BookTicket}/>
-          <Route path='/about' component={About}/>
-          <Route path='/contact-us' component={Contact}/>
-          </>
-        </Switch>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

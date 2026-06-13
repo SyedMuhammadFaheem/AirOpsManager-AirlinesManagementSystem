@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import "./styles/BookTicket.css";
 import { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
-import Axios from "axios";
+import apiClient from '../../api/client';
 
 
 const BookTicket = () => {
@@ -20,7 +20,7 @@ const BookTicket = () => {
   const [data, setData] = useState([]);
 
   const loadData = async () => {
-    const response = await Axios.get("http://localhost:5000/airport/api/get");
+    const response = await apiClient.get("/airport/api/get");
     setData(response.data);
   };
 
@@ -30,8 +30,7 @@ const BookTicket = () => {
   const { id } = useParams();
   // handle submit
   const onSubmit = (data) => {
-    console.log(data.departure);
-    Axios.post("http://localhost:5000/BookTicket", {
+    apiClient.post("/BookTicket", {
       departure: data.departure,
       arrival: data.arrival,
       departureDate: data.departureDate,
