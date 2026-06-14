@@ -1,166 +1,118 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { Plane, CheckCircle } from 'lucide-react';
+import Swal from 'sweetalert2';
 import apiClient from '../../api/client';
-import "./styles/Invoice.css";
-import Swall from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-const initialState = {
-  sc_id: "",
-  cl_id: "",
-  price: "",
-};
-const Invoice = () => {
-  const Swal=withReactContent(Swall)
+import CustomerNavbar from '../CustomerNavbar';
+
+const initialState = { sc_id: '', cl_id: '' };
+
+export default function Invoice() {
   const { id } = useParams();
   const [data, setData] = useState({});
   const [user, setUser] = useState({});
+  const [paying, setPaying] = useState(false);
   const history = useHistory();
-  const loadData = async () => {
-    const Returnresponse = await apiClient.get(
-      "/invoicefares"
-    );
-    setUser(Returnresponse.data[0]);
-    
-    initialState.departure = user.departure;
-  };
 
   useEffect(() => {
-    initialState.sc_id = id.slice(0, 2);
-    initialState.cl_id = id.slice(2, 4);
-    apiClient.post("/UpdateFlightBooking",{
-        id:initialState.sc_id,
-    })
-    apiClient.get(`/invoice/${initialState.cl_id}`).then((resp) =>
-      setData({ ...resp.data[0] })
-    );
-    loadData();
-  }, []);
-  const foo = async () => {
-    await apiClient.post("/invoiceconfirm", {
-      id: initialState.sc_id,
-      departure: user.departure,
-    });
-    await apiClient.post("/invoiceconfirmAgain", {
-      id: initialState.cl_id,
-      flight_no: user.flight_no,
-      fares: user.price.substr(2, 6),
-    });
-    apiClient.delete('/removeSearch');
-    Swal.fire("Ticket Booked Successfully!", "", "success");
-    setTimeout(() => history.push(`/BoardingPass/${id.slice(2, 4)}`), 500);
+    const [sc_id, cl_id] = id.split('-');
+    initialState.sc_id = sc_id;
+    initialState.cl_id = cl_id;
+    const load = async () => {
+      await apiClient.post('/UpdateFlightBooking', { id: initialState.sc_id });
+      const [clientRes, faresRes] = await Promise.all([
+        apiClient.get(`/invoice/${initialState.cl_id}`),
+        apiClient.get('/invoicefares'),
+      ]);
+      setData(clientRes.data || {});
+      setUser(faresRes.data || {});
+    };
+    load();
+  }, [id]);
+
+  const handlePay = async () => {
+    setPaying(true);
+    try {
+      await apiClient.post('/invoiceconfirm', { id: initialState.sc_id, departure: user.departure });
+      await apiClient.post('/invoiceconfirmAgain', {
+        id: initialState.cl_id,
+        flight_no: user.flight_no,
+        fares: user.price ? parseInt(user.price.replace(/[^0-9]/g, ''), 10) : 0,
+      });
+      await apiClient.delete('/removeSearch');
+      await Swal.fire({ title: 'Ticket Booked!', text: 'Your booking is confirmed.', icon: 'success', confirmButtonColor: '#0EA5E9' });
+      history.push(`/boarding-pass/${initialState.cl_id}`);
+    } catch {
+      Swal.fire('Error', 'Could not complete booking. Please try again.', 'error');
+      setPaying(false);
+    }
   };
+
   return (
-    <div className="bg-image">
-      <div className="container d-flex justify-content-center mt-5">
-        <div className="card" style={{ width: "600px", border: "none" }}>
-          <div>
-            <div className="d-flex pt-3 pl-3">
+    <div className="min-h-screen bg-slate-50">
+      <CustomerNavbar />
+      <div className="pt-24 pb-16 px-4 max-w-md mx-auto">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Booking Summary</h1>
+          <p className="text-sm text-gray-500 mt-1">Review your flight details before payment</p>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-4">
+          {/* Flight header */}
+          <div className="bg-gradient-to-r from-sky-500 to-sky-600 px-6 py-5">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                <Plane size={18} className="text-white" />
+              </div>
               <div>
-                <img
-                  src="https://img.icons8.com/ios-filled/50/000000/visa.png"
-                  width="80"
-                  height="90"
-                />
-              </div>
-              <div className="mt-3 pl-2">
-                <span
-                  className="name"
-                  style={{
-                    marginLeft: "100px",
-                    marginTop: "10px",
-                    fontSize: "20px",
-                    marginBottom: "40px",
-                  }}
-                >
-                  {data.fname} {data.lname}
-                </span>
-                <div>
-                  <span
-                    className="cross"
-                    style={{
-                      fontSize: "15px",
-                      marginTop: "50px",
-                      marginLeft: "6px",
-                    }}
-                  >
-                    &#10005&#10005&#10005&#10005
-                  </span>
-                  <span className="pin ml-2">8880</span>
-                </div>
+                <p className="text-sky-100 text-xs">AirOps Manager</p>
+                <p className="text-white font-bold">Flight Booking</p>
               </div>
             </div>
+          </div>
 
-            <div className="py-2  px-3">
-              <div className="first pl-2 d-flex py-2">
-                <div className="form-check">
-                  <input
-                    type="radio"
-                    name="optradio"
-                    className="form-check-input mt-3 dot"
-                    checked
-                  />
-                </div>
-                <div className="border-left pl-2">
-                  <span className="head" style={{ fontSize: "20px" }}>
-                    Total amount due
-                  </span>
-                  <div>
-                    <span className="amount">{user.price}</span>
-                  </div>
-                </div>
+          {/* Passenger */}
+          <div className="px-6 py-4 border-b border-gray-100">
+            <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Passenger</p>
+            <p className="font-semibold text-gray-900">{data.fname || '—'} {data.lname || ''}</p>
+          </div>
+
+          {/* Amount */}
+          <div className="px-6 py-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">Total Amount Due</p>
+                <p className="text-3xl font-black text-gray-900">{user.price || '—'}</p>
               </div>
-            </div>
-
-            <div className="py-2  px-3">
-              <div className="second pl-2 d-flex py-2">
-                <div className="form-check">
-                  <input
-                    type="radio"
-                    name="optradio"
-                    className="form-check-input mt-3 dot"
-                  />
-                </div>
-                <div className="border-left pl-2">
-                  <span className="head" style={{ fontSize: "20px" }}>
-                    Other amount
-                  </span>
-                  <div className="d-flex">
-                    <span
-                      className="dollar"
-                      style={{
-                        marginRight: "5px",
-                        marginTop: "5px",
-                        fontSize: "20px",
-                      }}
-                    >
-                      ${" "}
-                    </span>
-                    <input
-                      type="text"
-                      name="text"
-                      className="form-control ml-1"
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
+              <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center">
+                <CheckCircle size={24} className="text-green-500" />
               </div>
-            </div>
-
-            <div className="d-flex justify-content-between px-3 pt-4 pb-3">
-              <button
-                onClick={foo}
-                type="button"
-                className="btn btn-primary button"
-                style={{ fontSize: "20px" }}
-              >
-                Pay amount
-              </button>
             </div>
           </div>
         </div>
+
+        {/* Services */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-4 mb-6">
+          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Includes</p>
+          {['Seat reservation', 'Carry-on baggage', 'In-flight service'].map(s => (
+            <div key={s} className="flex items-center gap-2 py-1.5 text-sm text-gray-600">
+              <CheckCircle size={14} className="text-green-500 flex-shrink-0" />
+              {s}
+            </div>
+          ))}
+        </div>
+
+        <button onClick={handlePay} disabled={paying}
+          className="w-full bg-sky-500 hover:bg-sky-600 disabled:opacity-60 text-white font-bold py-4 rounded-2xl text-sm transition-colors flex items-center justify-center gap-2">
+          {paying ? (
+            <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Processing…</>
+          ) : (
+            <>Confirm & Pay {user.price || ''}</>
+          )}
+        </button>
+
+        <p className="text-center text-xs text-gray-400 mt-3">Secure payment · No hidden fees</p>
       </div>
     </div>
   );
-};
-
-export default Invoice;
+}

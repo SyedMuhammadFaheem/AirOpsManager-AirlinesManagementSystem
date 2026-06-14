@@ -1,48 +1,51 @@
-import React,{useState,useEffect} from 'react'
-import {useParams,Link} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { ArrowLeft, Navigation } from 'lucide-react';
 import apiClient from '../../api/client';
-import './styles/View.css'
+import AdminLayout from '../Layout/AdminLayout';
 
-const ViewFlight = () => {
-  const [user,setUser]=useState({});
-  const {id}=useParams();
+export default function ViewFlight() {
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+
   useEffect(() => {
-    apiClient
-      .get(`/flight/api/get/${id}`)
-      .then((resp) => setUser({ ...resp.data[0] }));
+    apiClient.get(`/flight/api/get/${id}`)
+      .then(r => setData(r.data || {}))
+      .finally(() => setLoading(false));
   }, [id]);
+
+  const Row = ({ label, value }) => (
+    <div className="py-3 grid grid-cols-2 gap-4 border-b border-navy-700 last:border-0">
+      <dt className="text-xs font-medium text-gray-500 uppercase tracking-wider">{label}</dt>
+      <dd className="text-sm text-gray-100 font-mono font-medium">{value ?? <span className="text-gray-600 font-sans">—</span>}</dd>
+    </div>
+  );
+
   return (
-  
-    <div style={{marginTop:'150px'}}>
-      <div className='card'>
-        <div className='card-header'>
-          <p>Flight Detail</p>
+    <AdminLayout>
+      <div className="max-w-2xl">
+        <Link to="/flights" className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-300 mb-5 transition-colors">
+          <ArrowLeft size={15} /> Back to Flights
+        </Link>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-9 h-9 bg-brand-500/15 rounded-lg flex items-center justify-center"><Navigation size={18} className="text-brand-400" /></div>
+          <div>
+            <h1 className="text-xl font-semibold text-white">Flight Detail</h1>
+            <p className="text-xs text-gray-500">Flight No: {id}</p>
+          </div>
         </div>
-        <div className='container'>
-          <strong>Flight No: </strong>
-          <span>{id}</span>
-          <br/>
-          <br/>
-          <strong>Schedule ID: </strong>
-          <span>{user.schedule_id}</span>
-          <br/>
-          <br/>
-          <strong>Flight Status ID: </strong>
-          <span>{user.flightStatus_id}</span>
-          <br/>
-          <br/>
-          <strong>Airplane ID: </strong>
-          <span>{user.airplane_id}</span>
-          <br/>
-          <br/>
-          
-          <Link to='/Flight'>
-            <div className='btn btn-edit'>Back</div>
-          </Link>
+        <div className="admin-card p-6">
+          {loading ? <div className="flex justify-center py-8"><div className="w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" /></div> : (
+            <dl>
+              <Row label="Flight Number" value={data.flight_no} />
+              <Row label="Schedule ID" value={data.schedule_id} />
+              <Row label="Flight Status ID" value={data.flightStatus_id} />
+              <Row label="Airplane ID" value={data.airplane_id} />
+            </dl>
+          )}
         </div>
       </div>
-    </div>
-  )
+    </AdminLayout>
+  );
 }
-
-export default ViewFlight

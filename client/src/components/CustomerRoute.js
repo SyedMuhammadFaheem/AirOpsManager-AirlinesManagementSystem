@@ -11,7 +11,7 @@ const CustomerRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        auth.role === 'customer' ? <Component {...props} /> : <Redirect to="/CustomerSignin" />
+        auth.role === 'customer' ? <Component {...props} /> : <Redirect to="/customer-signin" />
       }
     />
   );

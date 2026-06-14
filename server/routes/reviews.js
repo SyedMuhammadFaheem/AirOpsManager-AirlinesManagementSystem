@@ -45,7 +45,10 @@ router.post('/addreview/:id', verifyCustomer, (req, res) => {
   }
 
   db.query('INSERT INTO customer_review VALUES (?, ?)', [clientId, review.trim()], (err) => {
-    if (err) return res.status(500).json({ message: 'Could not submit review' });
+    if (err) {
+      if (err.code === 'ER_DUP_ENTRY') return res.status(409).json({ message: 'You have already submitted a review.' });
+      return res.status(500).json({ message: 'Could not submit review' });
+    }
     res.status(201).json({ success: true });
   });
 });

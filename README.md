@@ -2,7 +2,6 @@
 
 A full-stack airline operations platform built with React, Express.js, and MySQL. It provides an **Admin Panel** for managing flights, airplanes, airports, schedules, clients, and bookings — and a **Customer Panel** for browsing flights, booking tickets, and leaving reviews.
 
-
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)

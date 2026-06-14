@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db/pool');
-const { authLimiter } = require('../middleware/rateLimiter');
+const { adminLimiter, customerLimiter } = require('../middleware/rateLimiter');
 const { validateAdminLogin, validateCustomerLogin, validateSignup } = require('../middleware/validate');
 
 const router = express.Router();
@@ -14,7 +14,7 @@ const COOKIE_OPTIONS = {
   maxAge: 8 * 60 * 60 * 1000, // 8 hours
 };
 
-router.post('/login', authLimiter, validateAdminLogin, (req, res) => {
+router.post('/login', adminLimiter, validateAdminLogin, (req, res) => {
   const { username, password } = req.body;
   db.query(
     'SELECT username, password FROM admin WHERE username = ?',
@@ -27,13 +27,14 @@ router.post('/login', authLimiter, validateAdminLogin, (req, res) => {
       if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
       const token = jwt.sign({ username, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '8h' });
+      res.clearCookie('customer_token');
       res.cookie('admin_token', token, COOKIE_OPTIONS);
       res.json({ success: true });
     }
   );
 });
 
-router.post('/customerlogin', authLimiter, validateCustomerLogin, (req, res) => {
+router.post('/customerlogin', customerLimiter, validateCustomerLogin, (req, res) => {
   const { email, password } = req.body;
   db.query(
     'SELECT client_id, fname, lname, email, password FROM clients WHERE email = ?',
@@ -47,6 +48,7 @@ router.post('/customerlogin', authLimiter, validateCustomerLogin, (req, res) => 
 
       const { password: _pw, ...safeUser } = results[0];
       const token = jwt.sign({ client_id: safeUser.client_id, role: 'customer' }, process.env.JWT_SECRET, { expiresIn: '8h' });
+      res.clearCookie('admin_token');
       res.cookie('customer_token', token, COOKIE_OPTIONS);
       res.json({ success: true, user: safeUser });
     }

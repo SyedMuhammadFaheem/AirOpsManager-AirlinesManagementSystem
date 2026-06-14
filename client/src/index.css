@@ -1,13 +1,103 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    background: #F8FAFC;
+    color: #111827;
+  }
+
+  /* Admin dark body override — applied via .admin-shell class */
+  .admin-shell {
+    background: #0B1120;
+    color: #F9FAFB;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  input, select, textarea {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* Scrollbar styling for admin dark sidebar */
+  .admin-shell ::-webkit-scrollbar {
+    width: 4px;
+  }
+  .admin-shell ::-webkit-scrollbar-track {
+    background: #111827;
+  }
+  .admin-shell ::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 2px;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer components {
+  /* Badge variants */
+  .badge-success { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-900/50 text-emerald-400 border border-emerald-800; }
+  .badge-warning { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-900/50 text-amber-400 border border-amber-800; }
+  .badge-danger  { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-900/50 text-red-400 border border-red-800; }
+  .badge-info    { @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-900/50 text-blue-400 border border-blue-800; }
+
+  /* Admin card */
+  .admin-card {
+    @apply bg-navy-800 border border-navy-700 rounded-xl;
+  }
+
+  /* Admin input */
+  .admin-input {
+    @apply w-full bg-navy-900 border border-navy-600 rounded-lg px-4 py-2.5 text-gray-100 placeholder-gray-500
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+           transition-colors text-sm;
+  }
+
+  /* Admin select */
+  .admin-select {
+    @apply w-full bg-navy-900 border border-navy-600 rounded-lg px-4 py-2.5 text-gray-100
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500
+           transition-colors text-sm;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white font-medium rounded-lg
+           transition-all duration-150 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-navy-900;
+  }
+
+  /* Secondary/ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-600 text-gray-300 hover:text-white font-medium rounded-lg
+           transition-all duration-150 text-sm border border-navy-600;
+  }
+
+  /* Danger button */
+  .btn-danger {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 bg-red-900/40 hover:bg-red-900/70 text-red-400 hover:text-red-300 rounded-lg
+           transition-all duration-150 text-sm border border-red-800/50;
+  }
+
+  /* Icon action button */
+  .btn-icon {
+    @apply p-1.5 rounded-lg transition-all duration-150 text-gray-400 hover:text-white hover:bg-navy-700;
+  }
 }

@@ -1,157 +1,100 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useHistory, Link } from "react-router-dom";
-import "./styles/AddEdit.css";
+import React, { useEffect, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { ArrowLeft, Users } from 'lucide-react';
 import apiClient from '../../api/client';
-import { toast } from "react-toastify";
-const initialState = {
-  client_id: "",
-  fname: "",
-  mname: "",
-  lname: "",
-  phone: "",
-  email: "",
-  passport: "",
-};
-const AddEditClient = () => {
-  const [state, setState] = useState(initialState);
-  const { client_id, fname, mname, lname, phone, email, passport } = state;
+import AdminLayout from '../Layout/AdminLayout';
 
+const empty = { client_id: '', fname: '', mname: '', lname: '', phone: '', email: '', passport: '', password: '' };
+
+function Field({ label, name, type = 'text', required, placeholder, value, onChange }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium text-gray-400 mb-1.5">
+        {label} {required && <span className="text-red-400">*</span>}
+      </label>
+      <input type={type} name={name} value={value ?? ''} onChange={onChange}
+        placeholder={placeholder || label}
+        className="admin-input" />
+    </div>
+  );
+}
+
+export default function AddEditClient() {
+  const [state, setState] = useState(empty);
+  const { id } = useParams();
   const history = useHistory();
 
-  const { id } = useParams();
-
   useEffect(() => {
-    apiClient
-      .get(`/api/get/${id}`)
-      .then((resp) => setState({ ...resp.data[0] }));
+    if (id) apiClient.get(`/api/get/${id}`).then(r => setState({ ...r.data })).catch(() => {});
   }, [id]);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (
-      !client_id ||
-      !fname ||
-      !mname ||
-      !lname ||
-      !phone ||
-      !email ||
-      !passport
-    )
-      toast.error("Required Fields are empty");
-    else {
-      if(!id)
-      {
+  const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }));
 
-        apiClient
-          .post("/api/post", {
-            client_id,
-            fname,
-            mname,
-            lname,
-            phone,
-            email,
-            passport,
-          })
-          .then(() => {
-            setState({ client_id: "", fname: "", mname: "", lname: "", phone: "", email: "", passport: "" });
-            toast.success('Client Added Successfully');
-          })
-          .catch((err) => toast.error(err.response.data));
-      }
-      else{
-        apiClient
-          .put(`/api/update/${id}`, {
-            client_id,
-            fname,
-            mname,
-            lname,
-            phone,
-            email,
-            passport,
-          })
-          .then(() => {
-            setState({ client_id: "", fname: "", mname: "", lname: "", phone: "", email: "", passport: "" });
-            toast.success('Client Updated Successfully');
-          })
-          .catch((err) => toast.error(err.response.data));
-      }
-      setTimeout(() => history.push("/Client"), 500);
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const { client_id, fname, lname, phone, email, passport, password } = state;
+    if (!client_id || !fname || !lname || !phone || !email || !passport) {
+      toast.error('Please fill all required fields'); return;
+    }
+    if (!id && !password) {
+      toast.error('Password is required for new clients'); return;
+    }
+    try {
+      if (!id) await apiClient.post('/api/post', state);
+      else await apiClient.put(`/api/update/${id}`, state);
+      toast.success(id ? 'Client updated' : 'Client added');
+      setTimeout(() => history.push('/clients'), 400);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Something went wrong');
     }
   };
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setState({ ...state, [name]: value });
-  };
   return (
-    <div style={{ marginTop: "100px" }}>
-      <form
-        style={{
-          margin: "auto",
-          padding: "15px",
-          maxWidth: "600px",
-          alignContent: "center",
-          backgroundColor: "grey",
-          borderRadius: "10px",
-        }}
-        onSubmit={handleSubmit}
-      >
-        <label htmlFor="client-id">Client ID</label>
-        <input
-          type="text" name="client_id" value={client_id || ""}
-          placeholder="ID"
-          required
-          onChange={handleInputChange}
-        />
+    <AdminLayout>
+      <div className="max-w-2xl">
+        {/* Header */}
+        <button onClick={() => history.push('/clients')} className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-300 mb-5 transition-colors">
+          <ArrowLeft size={15} /> Back to Clients
+        </button>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-9 h-9 bg-brand-500/15 rounded-lg flex items-center justify-center">
+            <Users size={18} className="text-brand-400" />
+          </div>
+          <div>
+            <h1 className="text-xl font-semibold text-white">{id ? 'Edit Client' : 'Add New Client'}</h1>
+            <p className="text-xs text-gray-500">{id ? `Editing client ID ${id}` : 'Register a new passenger'}</p>
+          </div>
+        </div>
 
-        <label htmlFor="fname">First Name</label>
-        <input
-          type="text" name="fname" value={fname || ""}
-          placeholder="First Name"
-          onChange={handleInputChange}
-        />
+        <form onSubmit={handleSubmit}>
+          <div className="admin-card p-6 space-y-5">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider border-b border-navy-700 pb-3">Personal Information</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field label="First Name" name="fname" required value={state.fname} onChange={handleChange} />
+              <Field label="Last Name" name="lname" required value={state.lname} onChange={handleChange} />
+              <Field label="Middle Name" name="mname" value={state.mname} onChange={handleChange} />
+              <Field label="Client ID" name="client_id" required placeholder="Unique ID" value={state.client_id} onChange={handleChange} />
+            </div>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider border-b border-navy-700 pb-3 pt-2">Contact & Identity</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field label="Phone" name="phone" type="tel" required value={state.phone} onChange={handleChange} />
+              <Field label="Email" name="email" type="email" required value={state.email} onChange={handleChange} />
+              <Field label="Passport Number" name="passport" required value={state.passport} onChange={handleChange} />
+              {!id && <Field label="Password" name="password" type="password" required placeholder="Min 6 characters" value={state.password} onChange={handleChange} />}
+            </div>
+          </div>
 
-        <label htmlFor="mname">Middle Name</label>
-        <input
-          type="text" name="mname" value={mname || ""}
-          placeholder="Middle Name"
-          onChange={handleInputChange}
-        />
-
-        <label htmlFor="lname">Last Name</label>
-        <input
-          type="text" name="lname" value={lname || ""}
-          placeholder="Last Name"
-          onChange={handleInputChange}
-        />
-
-        <label htmlFor="phone">Phone</label>
-        <input
-          type="number" name="phone" value={phone || ""}
-          placeholder="Phone"
-          onChange={handleInputChange}
-        />
-
-        <label htmlFor="email">Email</label>
-        <input
-          type="email" name="email" value={email || ""}
-          placeholder="Email"
-          onChange={handleInputChange}
-        />
-
-        <label htmlFor="passport">Passport</label>
-        <input
-          type="text" name="passport" value={passport || ""}
-          placeholder="Passport"
-          onChange={handleInputChange}
-        />
-        <input type="submit" value={id ? "Update" : "Add"} />
-        <Link to="/Client">
-          <input type="button" value="Back"></input>
-        </Link>
-      </form>
-    </div>
+          <div className="flex items-center justify-end gap-3 mt-5">
+            <button type="button" onClick={() => history.push('/clients')} className="btn-ghost">
+              Cancel
+            </button>
+            <button type="submit" className="btn-primary">
+              {id ? 'Save Changes' : 'Add Client'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </AdminLayout>
   );
-};
-
-export default AddEditClient;
+}

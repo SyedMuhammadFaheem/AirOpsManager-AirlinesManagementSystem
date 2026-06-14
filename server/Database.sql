@@ -325,14 +325,6 @@ select * from customer_review;
 insert into customer_review values(38,'Hello');
 
 -- triggers
-DROP TRIGGER IF EXISTS `airport_management`.`Ticket_AFTER_INSERT`;
-DELIMITER $$
-USE `airport_management`$$
-CREATE DEFINER = CURRENT_USER TRIGGER `airport_management`.`Ticket_AFTER_INSERT` AFTER INSERT ON `Ticket` FOR EACH ROW
-BEGIN
-	update airport_management.ticket set seat_no= (select nm from airport_management.tempseatgen order by rand() limit 1) where seat_no is null;
-END$$
-DELIMITER ;
 
 
 

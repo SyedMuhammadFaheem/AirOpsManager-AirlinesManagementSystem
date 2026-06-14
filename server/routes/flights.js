@@ -25,11 +25,10 @@ router.get('/get/:id', verifyAdmin, (req, res) => {
 });
 
 router.post('/post', verifyAdmin, validateFlight, (req, res) => {
-  const { flight_no, schedule_id, flightStatus_id, airplane_id } = req.body;
-  // Bug fix: was incorrectly inserting into 'schedule' table
+  const { flight_no, schedule_id, flightStatus_id, airplane_id, fares } = req.body;
   db.query(
-    'INSERT INTO flight (flight_no, schedule_id, flightStatus_id, airplane_id) VALUES (?, ?, ?, ?)',
-    [flight_no, schedule_id, flightStatus_id, airplane_id],
+    'INSERT INTO flight (flight_no, schedule_id, flightStatus_id, airplane_id, fares) VALUES (?, ?, ?, ?, ?)',
+    [flight_no, schedule_id, flightStatus_id, airplane_id, fares],
     (err) => {
       if (err) return res.status(500).json({ message: 'Could not create flight' });
       res.status(201).json({ success: true });

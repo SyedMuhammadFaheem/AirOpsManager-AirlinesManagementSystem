@@ -1,179 +1,114 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useHistory,Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Plane, ArrowLeft } from 'lucide-react';
 import apiClient from '../../api/client';
-import "./styles/BoardingPass.css";
-const BoardingPass = () => {
+
+const fmt = (val) => {
+  if (!val) return '—';
+  try { return new Date(val).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }); } catch { return val; }
+};
+
+export default function BoardingPass() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  const [user, setUser] = useState({});
-  const history = useHistory();
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    apiClient.get(`/booking/showPass/${id}`).then((resp) =>
-      setData({ ...resp.data[0] })
-    );
-  }, []);
+    apiClient.get(`/booking/showPass/${id}`)
+      .then(r => setData(r.data[0] || {}))
+      .finally(() => setLoading(false));
+  }, [id]);
+
   return (
-    <div className="bg-pic">
-      <div className="box">
-        <ul className="left">
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-        </ul>
+    <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center px-4 py-16">
+      <div className="w-full max-w-sm">
+        <Link to={`/customer-panel/${id}`} className="flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 mb-8 transition-colors">
+          <ArrowLeft size={15} /> Back to Dashboard
+        </Link>
 
-        <ul className="right">
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-          <li></li>
-        </ul>
-        <div className="ticket">
-          <span className="airline">FAST Airways</span>
-          <span className="airline airlineslip">FAST Airways</span>
-          <span className="boarding">Boarding pass</span>
-          <div className="content">
-            <span className="jfk">{data.airport_code}</span>
-            <span className="plane">
-              <svg
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-                height="60"
-                width="60"
-                image-rendering="optimizeQuality"
-                shape-rendering="geometricPrecision"
-                text-rendering="geometricPrecision"
-                viewBox="0 0 500 500"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g stroke="#222">
-                  <line
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-width="30"
-                    x1="300"
-                    x2="55"
-                    y1="390"
-                    y2="390"
-                  />
-                  <path
-                    d="M98 325c-9 10 10 16 25 6l311-156c24-17 35-25 42-50 2-15-46-11-78-7-15 1-34 10-42 16l-56 35 1-1-169-31c-14-3-24-5-37-1-10 5-18 10-27 18l122 72c4 3 5 7 1 9l-44 27-75-15c-10-2-18-4-28 0-8 4-14 9-20 15l74 63z"
-                    fill="#222"
-                    stroke-linejoin="round"
-                    stroke-width="10"
-                  />
-                </g>
-              </svg>
-            </span>
-            <span className="sfo"></span>
+        {loading ? (
+          <div className="flex justify-center py-16"><div className="w-8 h-8 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" /></div>
+        ) : (
+          <div className="w-full">
+            {/* Main ticket */}
+            <div className="bg-gradient-to-br from-sky-600 to-navy-900 rounded-3xl overflow-hidden shadow-2xl">
+              {/* Header */}
+              <div className="px-6 pt-6 pb-4">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                      <Plane size={14} className="text-white" />
+                    </div>
+                    <span className="text-white font-bold text-sm tracking-wide">AirOps Manager</span>
+                  </div>
+                  <span className="text-sky-200 text-xs uppercase tracking-widest font-medium">Boarding Pass</span>
+                </div>
 
-            <span className="jfk jfkslip">{data.airport_code}</span>
-            <span className="plane planeslip">
-              <svg
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-                height="50"
-                width="50"
-                image-rendering="optimizeQuality"
-                shape-rendering="geometricPrecision"
-                text-rendering="geometricPrecision"
-                viewBox="0 0 500 500"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g stroke="#222">
-                  <line
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-width="30"
-                    x1="300"
-                    x2="55"
-                    y1="390"
-                    y2="390"
-                  />
-                  <path
-                    d="M98 325c-9 10 10 16 25 6l311-156c24-17 35-25 42-50 2-15-46-11-78-7-15 1-34 10-42 16l-56 35 1-1-169-31c-14-3-24-5-37-1-10 5-18 10-27 18l122 72c4 3 5 7 1 9l-44 27-75-15c-10-2-18-4-28 0-8 4-14 9-20 15l74 63z"
-                    fill="#222"
-                    stroke-linejoin="round"
-                    stroke-width="10"
-                  />
-                </g>
-              </svg>
-            </span>
-            <span className="sfo sfoslip"></span>
-            <div className="sub-content">
-              <span className="name">
-                PASSENGER NAME
-                <br />
-                <span>{data.fname}, {data.lname}</span>
-              </span>
-              <span className="flight">
-                FLIGHT N&deg;
-                <br />
-                <span>{data.flight_no}</span>
-              </span>
-              <span className="gate">
-                GATE
-                <br />
-                <span>{data.gate_no}</span>
-              </span>
-              <span className="seat">
-                SEAT
-                <br />
-                <span>{data.seat_no}</span>
-              </span>
-              <span className="boardingtime">
-                BOARDING TIME
-                <br />
-                <span>{data.departure_time}</span>
-              </span>
+                {/* Airport code big display */}
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <div className="text-center">
+                    <div className="text-4xl font-black text-white font-mono">{data.airport_code || '—'}</div>
+                    <div className="text-sky-200 text-xs mt-1">Departure</div>
+                  </div>
+                  <div className="flex-1 flex items-center gap-1 px-2">
+                    <div className="flex-1 border-t border-white/20" />
+                    <Plane size={16} className="text-white/60" />
+                    <div className="flex-1 border-t border-white/20" />
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl font-black text-white font-mono">ARR</div>
+                    <div className="text-sky-200 text-xs mt-1">Arrival</div>
+                  </div>
+                </div>
+              </div>
 
-              <span className="flight flightslip">
-                FLIGHT N&deg;
-                <br />
-                <span>{data.flight_no}</span>
-              </span>
-              <span className="seat seatslip">
-                SEAT
-                <br />
-                <span>{data.seat_no}</span>
-              </span>
-              <span className="name nameslip">
-                PASSENGER NAME
-                <br />
-                <span>{data.fname}, {data.lname}</span>
-              </span>
+              {/* Divider with circles */}
+              <div className="relative flex items-center">
+                <div className="w-5 h-5 bg-slate-900 rounded-full -ml-2.5" />
+                <div className="flex-1 border-t-2 border-dashed border-white/20" />
+                <div className="w-5 h-5 bg-slate-900 rounded-full -mr-2.5" />
+              </div>
+
+              {/* Details grid */}
+              <div className="px-6 py-5 grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sky-300 text-xs uppercase tracking-wider mb-0.5">Passenger</p>
+                  <p className="text-white font-bold text-sm">{data.fname || '—'} {data.lname || ''}</p>
+                </div>
+                <div>
+                  <p className="text-sky-300 text-xs uppercase tracking-wider mb-0.5">Flight No.</p>
+                  <p className="text-white font-bold text-sm font-mono">{data.flight_no || '—'}</p>
+                </div>
+                <div>
+                  <p className="text-sky-300 text-xs uppercase tracking-wider mb-0.5">Gate</p>
+                  <p className="text-white font-bold text-lg font-mono">{data.gate_no || '—'}</p>
+                </div>
+                <div>
+                  <p className="text-sky-300 text-xs uppercase tracking-wider mb-0.5">Seat</p>
+                  <p className="text-white font-bold text-lg font-mono">{data.seat_no || '—'}</p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-sky-300 text-xs uppercase tracking-wider mb-0.5">Boarding Time</p>
+                  <p className="text-white font-semibold text-sm">{fmt(data.departure_time)}</p>
+                </div>
+              </div>
+
+              {/* Barcode placeholder */}
+              <div className="px-6 pb-6">
+                <div className="bg-white rounded-xl p-3 flex items-center justify-center gap-0.5 h-14">
+                  {Array.from({ length: 40 }).map((_, i) => (
+                    <div key={i} className="bg-gray-900 rounded-sm"
+                      style={{ width: i % 3 === 0 ? 3 : 1.5, height: i % 5 === 0 ? 36 : 28 }} />
+                  ))}
+                </div>
+                <p className="text-center text-sky-300 text-xs mt-2 font-mono tracking-widest">
+                  {data.flight_no || 'XXXXXXXX'} {data.seat_no || 'XX'}
+                </p>
+              </div>
             </div>
           </div>
-          <div className="barcode"></div>
-          <div className="barcode slip"></div>
-        </div>
-      </div>
-      <div>
-        <Link to={`/CustomerPanel/${id}`}>
-            <button className="btn btn-primary" style={{marginLeft:'57.5vw',marginTop:'62vh'}}>Back to Main</button>
-        </Link>
+        )}
       </div>
     </div>
   );
-};
-export default BoardingPass;
+}
