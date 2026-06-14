@@ -1,6 +1,8 @@
 import React, { Suspense } from 'react';
 import { Switch, Route, BrowserRouter, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { Analytics } from '@vercel/analytics/react';
+import { HelmetProvider } from 'react-helmet-async';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './contexts/AuthContext';
@@ -130,11 +132,14 @@ function AppRoutes() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+        <Analytics />
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

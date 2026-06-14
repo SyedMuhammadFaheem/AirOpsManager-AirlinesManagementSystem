@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS BOOKING (
   ticket_id    INT,
   flight_no    INT,
   fares        FLOAT,
+  CONSTRAINT PK_BOOKING        PRIMARY KEY (client_id, ticket_id),
   CONSTRAINT FK_CLIENTID       FOREIGN KEY (client_id)    REFERENCES CLIENTS (client_id),
   CONSTRAINT FK_AIRPORTCODE_B  FOREIGN KEY (airport_code) REFERENCES Airport (airport_code),
   CONSTRAINT FK_TicketID       FOREIGN KEY (ticket_id)    REFERENCES Ticket (ticket_id),
@@ -104,13 +105,13 @@ CREATE TABLE IF NOT EXISTS TempSeatGen (
 );
 
 -- Views
-CREATE OR REPLACE VIEW client        AS SELECT client_id, fname, mname, lname, phone, email, passport FROM clients;
-CREATE OR REPLACE VIEW airplanes     AS SELECT airplane_id, max_seats FROM airplane;
-CREATE OR REPLACE VIEW flightstatuses AS SELECT flightStatus_id, status FROM flightstatus;
-CREATE OR REPLACE VIEW gate          AS SELECT gate_no FROM gates;
-CREATE OR REPLACE VIEW airports      AS SELECT airport_code, airport_name, city, gate_no FROM airport;
-CREATE OR REPLACE VIEW reviews       AS SELECT client_id, review FROM customer_review;
-CREATE OR REPLACE VIEW schedules     AS SELECT schedule_id, departure_time, arrival_time, duration_time FROM schedule;
-CREATE OR REPLACE VIEW flights       AS SELECT flight_no, schedule_id, flightStatus_id, airplane_id, fares FROM flight;
-CREATE OR REPLACE VIEW tickets       AS SELECT ticket_id, seat_no, departure_time, gate_no, airport_code FROM ticket;
-CREATE OR REPLACE VIEW bookings      AS SELECT client_id, airport_code, ticket_id, flight_no, fares FROM booking;
+CREATE OR REPLACE VIEW client        AS SELECT client_id, fname, mname, lname, phone, email, passport FROM CLIENTS;
+CREATE OR REPLACE VIEW airplanes     AS SELECT airplane_id, max_seats FROM AIRPLANE;
+CREATE OR REPLACE VIEW flightstatuses AS SELECT flightStatus_id, status FROM FlightStatus;
+CREATE OR REPLACE VIEW gate          AS SELECT gate_no FROM Gates;
+CREATE OR REPLACE VIEW airports      AS SELECT airport_code, airport_name, city, gate_no FROM Airport;
+CREATE OR REPLACE VIEW reviews       AS SELECT client_id, review FROM CUSTOMER_REVIEW;
+CREATE OR REPLACE VIEW schedules     AS SELECT schedule_id, departure_time, arrival_time, duration_time FROM SCHEDULE;
+CREATE OR REPLACE VIEW flights       AS SELECT flight_no, schedule_id, flightStatus_id, airplane_id, fares FROM FLIGHT;
+CREATE OR REPLACE VIEW tickets       AS SELECT ticket_id, seat_no, departure_time, gate_no, airport_code FROM Ticket;
+CREATE OR REPLACE VIEW bookings      AS SELECT client_id, airport_code, ticket_id, flight_no, fares FROM BOOKING;

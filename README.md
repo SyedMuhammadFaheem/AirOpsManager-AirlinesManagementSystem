@@ -9,7 +9,8 @@ A full-stack airline operations platform built with React, Express.js, and MySQL
 - [2. Server Setup](#2-server-setup)
 - [3. Client Setup](#3-client-setup)
 - [4. Running the App](#4-running-the-app)
-- [5. Manual Testing Guide](#5-manual-testing-guide)
+- [5. Deployment (Free)](#5-deployment-free)
+- [6. Manual Testing Guide](#6-manual-testing-guide)
 - [Default Dev Credentials](#default-dev-credentials)
 - [Project Structure](#project-structure)
 - [Tech Stack](#tech-stack)
@@ -43,8 +44,6 @@ USE airport_management;
 ### Step 2 — Run the schema file
 
 This creates all the tables and views. Run this **first**, before the seeds.
-
-In your MySQL client, import the file:
 
 ```bash
 mysql -u root -p airport_management < server/schema.sql
@@ -90,9 +89,11 @@ Open `server/.env` and update it:
 
 ```env
 DB_HOST=localhost
+DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your_mysql_password_here
 DB_NAME=airport_management
+DB_SSL=false
 JWT_SECRET=replace_this_with_a_long_random_string_at_least_32_chars
 PORT=5000
 ALLOWED_ORIGIN=http://localhost:3000
@@ -162,7 +163,100 @@ The browser will open automatically at `http://localhost:3000`.
 
 ---
 
-## 5. Manual Testing Guide
+## 5. Deployment (Free)
+
+This project is configured for a fully free demo deployment using:
+
+| Layer | Platform | Notes |
+|---|---|---|
+| Frontend | [Vercel](https://vercel.com) | Free forever, global CDN |
+| Backend | [Render](https://render.com) | Free 750 hrs/month, sleeps after 15 min idle |
+| Database | [Aiven](https://aiven.io) | Free MySQL tier, always-on |
+
+> **Cold start warning:** Render's free tier sleeps after 15 minutes of inactivity. The first request after idle takes ~30–50 seconds. This is acceptable for demo use. The `/health` endpoint can be used to pre-warm the server.
+
+---
+
+### Step 1 — Set up Aiven MySQL
+
+1. Sign up at [aiven.io](https://aiven.io) → **Create service** → **MySQL** → **Free plan**
+2. Once running, go to the service **Overview** tab and note:
+   - Host → `DB_HOST`
+   - Port → `DB_PORT` (typically a non-standard port like `13306`)
+   - User → `DB_USER`
+   - Password → `DB_PASSWORD`
+   - Database name → `DB_NAME` (default: `defaultdb`)
+3. Connect via MySQL Workbench using the credentials above — set SSL mode to **Required**
+4. Run `server/schema.sql` then `server/seeds.sql` in order
+
+---
+
+### Step 2 — Deploy backend on Render
+
+1. Sign up at [render.com](https://render.com) → **New Web Service** → connect your GitHub repo
+2. Configure:
+   - **Root Directory:** `server`
+   - **Build Command:** `npm install`
+   - **Start Command:** `node index.js`
+   - **Plan:** Free
+3. Add environment variables:
+
+| Key | Value |
+|---|---|
+| `DB_HOST` | *(from Aiven)* |
+| `DB_PORT` | *(from Aiven)* |
+| `DB_USER` | *(from Aiven)* |
+| `DB_PASSWORD` | *(from Aiven)* |
+| `DB_NAME` | `defaultdb` |
+| `DB_SSL` | `true` |
+| `JWT_SECRET` | *(generate with `openssl rand -hex 32`)* |
+| `ALLOWED_ORIGIN` | *(set after Vercel deploy in Step 3)* |
+| `PORT` | `5000` |
+
+4. Deploy and copy your Render URL (e.g. `https://your-app.onrender.com`)
+
+---
+
+### Step 3 — Deploy frontend on Vercel
+
+1. Sign up at [vercel.com](https://vercel.com) → **Add New Project** → import your GitHub repo
+2. Configure:
+   - **Root Directory:** `client`
+   - **Framework Preset:** Create React App
+3. Add environment variable:
+
+| Key | Value |
+|---|---|
+| `REACT_APP_API_URL` | Your Render URL from Step 2 |
+
+4. Deploy and copy your Vercel URL (e.g. `https://your-app.vercel.app`)
+
+---
+
+### Step 4 — Wire CORS
+
+Go back to your Render service → **Environment** → set `ALLOWED_ORIGIN` to your Vercel URL. Render redeploys automatically.
+
+---
+
+### Step 5 — Verify
+
+```bash
+# Should return { "status": "ok", "timestamp": "..." }
+curl https://your-app.onrender.com/health
+```
+
+Then open your Vercel URL and test login.
+
+---
+
+### Vercel Analytics
+
+[Vercel Analytics](https://vercel.com/docs/analytics) is pre-configured in this project (`@vercel/analytics`). Once deployed to Vercel, visit your project dashboard → **Analytics** tab to see page views, visitors, and top routes. It is a no-op in local development.
+
+---
+
+## 6. Manual Testing Guide
 
 ### Verify the server is healthy
 
@@ -208,7 +302,7 @@ Once logged in as admin:
 1. Go to `http://localhost:3000/sign-up`
 2. Fill in all fields (use any email not already in the seed data)
 3. Submit — you should see "Registered Successfully"
-4. Go to `http://localhost:3000/CustomerSignin`
+4. Go to `http://localhost:3000/customer-signin`
 5. Log in with the email and password you just registered
 6. You should land on your Customer Panel
 
@@ -313,16 +407,16 @@ AirOpsManager/
 │       │   ├── Navbar/
 │       │   ├── CustomerNavbar/
 │       │   └── Pages/             # All 40+ page components
-│       └── App.js                 # Routes with lazy loading + auth guards
+│       └── App.js                 # Routes with lazy loading, auth guards, analytics
 │
 └── server/                        # Express.js backend
     ├── .env                       # DB credentials + JWT secret (never commit)
     ├── .env.example               # Safe template to commit
     ├── schema.sql                 # CREATE TABLE statements only
     ├── seeds.sql                  # INSERT statements with hashed passwords
-    ├── index.js                   # App setup (38 lines)
+    ├── index.js                   # App setup
     ├── db/
-    │   └── pool.js                # MySQL connection pool
+    │   └── pool.js                # MySQL connection pool (SSL-aware)
     ├── middleware/
     │   ├── auth.js                # JWT cookie verification
     │   ├── rateLimiter.js         # Brute-force protection
@@ -348,7 +442,8 @@ AirOpsManager/
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 18, React Router v5, Bootstrap 5, Tailwind CSS |
+| Frontend | React 18, React Router v5, Tailwind CSS |
+| Analytics | Vercel Analytics (`@vercel/analytics`) |
 | Forms | react-hook-form, express-validator |
 | HTTP Client | Axios (via centralized `api/client.js`) |
 | Auth | JWT (jsonwebtoken) in HttpOnly cookies |
@@ -356,6 +451,7 @@ AirOpsManager/
 | Security | Helmet, CORS, express-rate-limit, bcryptjs |
 | Database | MySQL 8 (raw SQL, mysql2 driver) |
 | Dev Tools | nodemon, dotenv |
+| Hosting | Vercel (frontend), Render (backend), Aiven (MySQL) |
 
 ---
 
@@ -371,6 +467,7 @@ AirOpsManager/
 
 **"CORS error" in browser console**
 - Make sure `ALLOWED_ORIGIN` in `server/.env` matches exactly what's in your browser URL bar (including the port)
+- On Render, confirm `ALLOWED_ORIGIN` is set to your exact Vercel URL with no trailing slash
 
 **Frontend shows blank page**
 - Make sure `REACT_APP_API_URL` in `client/.env` matches where your backend is running
@@ -378,3 +475,10 @@ AirOpsManager/
 
 **Port 5000 already in use**
 - Change `PORT=5001` in `server/.env` and update `REACT_APP_API_URL=http://localhost:5001` in `client/.env`
+
+**Render backend is slow to respond (first request)**
+- This is expected on the free tier — Render spins down services after 15 minutes of inactivity. The first request after idle takes ~30–50 seconds to wake up.
+
+**Aiven SSL connection error**
+- Confirm `DB_SSL=true` is set in your Render environment variables
+- Confirm `DB_PORT` matches the port shown in Aiven's Overview tab (not the default 3306)

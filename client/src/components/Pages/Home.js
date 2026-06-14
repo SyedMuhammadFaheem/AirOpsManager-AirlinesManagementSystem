@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Shield, Zap, Star, Globe } from 'lucide-react';
 import Slider from './Slider';
 import Footer from './Footer';
+import SEO from '../SEO';
 
 const features = [
   {
@@ -46,6 +47,11 @@ const highlights = [
 export default function Home() {
   return (
     <>
+      <SEO
+        title="Airline Operations Management System"
+        description="AirOpsManager is an all-in-one airline operations platform. Manage flights, schedules, bookings, gates, and passengers from a single unified dashboard. Book flights instantly."
+        path="/"
+      />
       <Slider />
 
       {/* Feature cards */}

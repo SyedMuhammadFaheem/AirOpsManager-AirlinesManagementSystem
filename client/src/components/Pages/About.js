@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Target, Award } from 'lucide-react';
 import apiClient from '../../api/client';
 import Footer from './Footer';
+import SEO from '../SEO';
 
 export default function About() {
   const [reviews, setReviews] = useState([]);
@@ -20,6 +21,11 @@ export default function About() {
 
   return (
     <>
+      <SEO
+        title="About Us — Aviation Operations Platform"
+        description="Learn about AirOpsManager — our mission to simplify airline operations, our platform capabilities, and our commitment to efficient, transparent aviation management."
+        path="/about"
+      />
       {/* Hero */}
       <section className="bg-gradient-to-br from-navy-900 to-sky-700 text-white py-20 text-center">
         <h1 className="text-4xl lg:text-5xl font-display font-bold mb-3">About AirOps Manager</h1>

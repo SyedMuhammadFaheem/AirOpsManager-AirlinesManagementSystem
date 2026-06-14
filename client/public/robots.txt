@@ -1,3 +1,30 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Allow: /about
+Allow: /contact-us
+Allow: /sign-up
+Allow: /customer-signin
+
+# Block all admin and authenticated routes
+Disallow: /signin
+Disallow: /admin-panel
+Disallow: /clients
+Disallow: /airplanes
+Disallow: /flight-status
+Disallow: /gates
+Disallow: /airports
+Disallow: /reviews
+Disallow: /schedules
+Disallow: /flights
+Disallow: /tickets
+Disallow: /bookings
+Disallow: /customer-panel/
+Disallow: /profile/
+Disallow: /book-ticket/
+Disallow: /available-flights/
+Disallow: /boarding-pass/
+Disallow: /invoice/
+Disallow: /add-review/
+Disallow: /my-tickets/
+
+Sitemap: https://air-ops-manager-airlines-management.vercel.app/sitemap.xml
