@@ -1,78 +1,67 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { User, ArrowLeft, Mail, Phone, CreditCard } from 'lucide-react';
 import apiClient from '../../api/client';
-import {
-  MDBCol,
-  MDBContainer,
-  MDBRow,
-  MDBCard,
-  MDBCardTitle,
-  MDBCardBody,
-  MDBCardImage,
-} from "mdb-react-ui-kit";
-import './styles/CustomerPanel.css'
-import { useParams, Link } from "react-router-dom";
-const ViewProfile = () => {
+import CustomerNavbar from '../CustomerNavbar';
+
+export default function ViewProfile() {
   const { id } = useParams();
   const [data, setData] = useState({});
-  useEffect(() => {
-    apiClient.get(`/api/get/${id}`).then((resp) =>
-      setData({ ...resp.data[0] })
-    );
-  }, []);
-  return (
-    <div className="vh-100 bg-pic">
-      <MDBContainer  style={{margin:'0',marginLeft:'28%'}}>
-        <MDBRow className="justify-content-center">
-          <MDBCol md="9" lg="7" xl="6" className="mt-8">
-            <MDBCard
-              style={{ borderRadius: "15px", width: "800px", marginTop: "50%",height:'350px'}}
-            >
-              <MDBCardBody className="p-4">
-                <div className="d-flex text-black">
-                  <div className="flex-shrink-0">
-                    <MDBCardImage
-                      style={{
-                        width: "225px",
-                        height: "300px",
-                        borderRadius: "10px",
-                      }}
-                      src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                      alt="Generic placeholder image"
-                      fluid
-                    />
-                  </div>
-                  <div className="flex-grow-1 ms-5">
-                    <div>
-                      <MDBCardTitle>First Name: {data.fname}</MDBCardTitle>
-                      <MDBCardTitle>Middle Name: {data.mname} </MDBCardTitle>
-                      <MDBCardTitle>Last Name: {data.lname}</MDBCardTitle>
-                    </div>
-                    <div style={{ display: "inline-block" }}>
-                      <MDBCardTitle>Phone: {data.phone}</MDBCardTitle>
-                      <MDBCardTitle>Email: {data.email}</MDBCardTitle>
-                      <MDBCardTitle>Passport: {data.passport}</MDBCardTitle>
-                    </div>
+  const [loading, setLoading] = useState(true);
 
-                    <div className="d-flex pt-1">
-                      <Link to={`/CustomerPanel/${id}`}>
-                        <button
-                          className="flex-grow-0 btn "
-                          style={{ fontSize: "20px", backgroundColor:'blue',color:'white'}}
-                        >
-                          Back to Main
-                        </button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
+  useEffect(() => {
+    apiClient.get(`/profile/${id}`)
+      .then(r => setData(r.data || {}))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  const Row = ({ icon: Icon, label, value }) => (
+    <div className="flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
+      <div className="w-8 h-8 bg-sky-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+        <Icon size={14} className="text-sky-500" />
+      </div>
+      <div>
+        <p className="text-xs text-gray-500 mb-0.5">{label}</p>
+        <p className="text-sm font-medium text-gray-900">{value || '—'}</p>
+      </div>
     </div>
   );
-};
 
-export default ViewProfile;
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <CustomerNavbar />
+      <div className="pt-24 pb-16 px-4 max-w-lg mx-auto">
+        <Link to={`/customer-panel/${id}`} className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 mb-6 transition-colors">
+          <ArrowLeft size={15} /> Back to Dashboard
+        </Link>
+
+        {loading ? (
+          <div className="flex justify-center py-16"><div className="w-8 h-8 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" /></div>
+        ) : (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-br from-sky-500 to-sky-700 px-6 py-8 text-center">
+              <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                <User size={36} className="text-white" />
+              </div>
+              <h1 className="text-xl font-bold text-white">
+                {data.fname} {data.mname ? `${data.mname} ` : ''}{data.lname}
+              </h1>
+              <p className="text-sky-200 text-sm mt-1">Customer ID: {id}</p>
+            </div>
+
+            {/* Details */}
+            <div className="px-6 py-4">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Contact Information</p>
+              <Row icon={Mail} label="Email Address" value={data.email} />
+              <Row icon={Phone} label="Phone Number" value={data.phone} />
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-4 mb-2">Travel Documents</p>
+              <Row icon={CreditCard} label="Passport Number" value={data.passport} />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

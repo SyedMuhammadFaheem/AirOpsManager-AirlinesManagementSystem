@@ -1,262 +1,118 @@
-import React from "react";
-import { FaPlaneArrival, FaPlaneDeparture, FaChild } from "react-icons/fa";
-import { GiPerson } from "react-icons/gi";
-import { useForm } from "react-hook-form";
-import "./styles/BookTicket.css";
-import { useState, useEffect } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { FaPlaneArrival, FaPlaneDeparture } from 'react-icons/fa';
+import { useParams, useHistory } from 'react-router-dom';
 import apiClient from '../../api/client';
+import CustomerNavbar from '../CustomerNavbar';
 
-
-const BookTicket = () => {
-  
+export default function BookTicket() {
   const history = useHistory();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const [data, setData] = useState([]);
-
-  const loadData = async () => {
-    const response = await apiClient.get("/airport/api/get");
-    setData(response.data);
-  };
+  const { id } = useParams();
+  const [airports, setAirports] = useState([]);
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   useEffect(() => {
-    loadData();
+    apiClient.get('/airport/api/get').then(r => setAirports(r.data));
   }, []);
-  const { id } = useParams();
-  // handle submit
-  const onSubmit = (data) => {
-    apiClient.post("/BookTicket", {
+
+  const onSubmit = async (data) => {
+    await apiClient.post('/BookTicket', {
       departure: data.departure,
       arrival: data.arrival,
       departureDate: data.departureDate,
       returnDate: data.returnDate,
       class: data.class,
       price: data.price,
-    }).then((response) => {
-      if (response.data.err) console.log(response.data.err);
     });
-    // .catch((err) => toast.error(err.response.data));
-    setTimeout(() => history.push(`/AvailableFlights/${id}`), 100);
+    history.push(`/available-flights/${id}`);
   };
+
+  const FieldError = ({ msg }) => msg ? <p className="text-xs text-red-500 mt-1">{msg}</p> : null;
+
   return (
-    <div className="bg-img">
+    <div className="min-h-screen bg-slate-50">
+      <CustomerNavbar />
+      <div className="pt-24 pb-16 px-4 max-w-xl mx-auto">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Find a Flight</h1>
+          <p className="text-sm text-gray-500 mt-1">Search for available routes</p>
+        </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} >
-          {/* header section */}
-
-          {/* body section */}
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-5">
+          {/* Departure */}
           <div>
-            <div className="grid justify-center space-y-5 pb-10" >
-              {/* departure section */}
-              <div>
-                <div>
-                  <div className="relative" style={{ marginTop: "50px" }}>
-                    <p className="font-bold text-xl uppercase">flying from</p>
-                    <select style={{ marginTop: "-15px"}}
-                      className={`w-full h-16 text-2xl pl-20 rounded-lg ${errors.departure &&
-                        " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
-                      {...register("departure", {
-                        required: {
-                          value: true,
-                          message: "Departure is required",
-                        },
-                      })}
-                    >
-                      <option value="" selected disabled hidden>
-                        --Select Airport--
-                      </option>
-                      {data.map((item, index) => {
-                        return (
-                          <>
-                            <option value={item.airport_name}>
-                              {" "}
-                              {item.airport_name}
-                            </option>
-                          </>
-                        );
-                      })}
-                    </select>
-                    <FaPlaneDeparture className="text-4xl absolute left-5 top-10 " />
-                  </div>
-                  <div>
-                    {errors.departure && (
-                      <span className="text-sm text-red-500">
-                        {errors.departure.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Flying From</label>
+            <div className="relative">
+              <FaPlaneDeparture className="absolute left-3 top-1/2 -translate-y-1/2 text-sky-400" size={16} />
+              <select {...register('departure', { required: 'Departure is required' })}
+                className={`w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 ${errors.departure ? 'border-red-400' : 'border-gray-200'}`}>
+                <option value="" disabled hidden>-- Select Airport --</option>
+                {airports.map(a => <option key={a.airport_code} value={a.airport_name}>{a.airport_name}</option>)}
+              </select>
+            </div>
+            <FieldError msg={errors.departure?.message} />
+          </div>
 
-              {/* arrival section */}
-              <div>
-                <div>
-                  <div className="relative">
-                    <p className="font-bold text-xl uppercase">flying to</p>
-                    <select style={{ marginTop: "-15px" }}
-                      className={`w-full h-16 text-2xl pl-20 rounded-lg ${errors.arrival &&
-                        " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
-                      {...register("arrival", {
-                        required: {
-                          value: true,
-                          message: "Arrival is required",
-                        },
-                      })}
-                    >
-                      <option value="" selected disabled hidden>
-                        --Select Airport--
-                      </option>
-                      {data.map((item, index) => {
-                        return (
-                          <>
-                            <option value={item.airport_name}>
-                              {" "}
-                              {item.airport_name}
-                            </option>
-                          </>
-                        );
-                      })}
-                    </select>
-                    <FaPlaneArrival className="text-4xl absolute left-5 top-10 " />
-                  </div>
-                  <div>
-                    {errors.arrival && (
-                      <span className="text-sm text-red-500">
-                        {errors.arrival.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
+          {/* Arrival */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Flying To</label>
+            <div className="relative">
+              <FaPlaneArrival className="absolute left-3 top-1/2 -translate-y-1/2 text-sky-400" size={16} />
+              <select {...register('arrival', { required: 'Arrival is required' })}
+                className={`w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 ${errors.arrival ? 'border-red-400' : 'border-gray-200'}`}>
+                <option value="" disabled hidden>-- Select Airport --</option>
+                {airports.map(a => <option key={a.airport_code} value={a.airport_name}>{a.airport_name}</option>)}
+              </select>
+            </div>
+            <FieldError msg={errors.arrival?.message} />
+          </div>
 
-              {/* date section */}
-              <div className="flex space-x-2">
-                {/* departure section */}
-                <div>
-                  <div>
-                    <div className="relative">
-                      <p className="font-bold text-xl uppercase">
-                        departure date
-                      </p>
-                      <input style={{ marginTop: "-13px"}}
-                        type="date"
-                        className={`w-full h-16 text-2xl rounded-lg ${errors.departureDate &&
-                          " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
-                        {...register("departureDate", {
-                          required: {
-                            value: true,
-                            message: "Departure date is required",
-                          },
-                        })}
-                      />
-                    </div>
-                    <div>
-                      {errors.departureDate && (
-                        <span className="text-sm text-red-500">
-                          {errors.departureDate.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* return section */}
-                <div>
-                  <div>
-                    <div className="relative">
-                      <p className="font-bold text-xl uppercase">return date</p>
-                      <input style={{ marginTop: "-13px"}}
-                        type="date"
-                        className={`w-full h-16 text-2xl rounded-lg ${errors.returnDate &&
-                          " focus:border-red-500 focus:ring-red-500 border-red-500"}`}
-                        {...register("returnDate", {
-                          required: {
-                            value: true,
-                            message: "Return date is required",
-                          },
-                        })}
-                      />
-                    </div>
-                    <div>
-                      {errors.returnDate && (
-                        <span className="text-sm text-red-500">
-                          {errors.returnDate.message}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* class and price section */}
-              <div className="flex space-x-2">
-                {/* class section */}
-                <div className="w-full">
-                  <div>
-                    <div>
-                      <p className="font-bold text-xl uppercase"> class</p>
-                      <select style={{ marginTop: "-15px"}}
-                        className="w-full h-16 rounded-lg text-2xl pl-20"
-                        {...register("class", {
-                          required: {
-                            value: true,
-                            message: "Trip type is required",
-                          },
-                        })}
-                      >
-                        <option>Economy</option>
-                        <option>Business</option>
-                      </select>
-                    </div>
-                    {/* <div>Error</div> */}
-                  </div>
-                </div>
-
-                {/* price section */}
-                <div className="w-full">
-                  <div>
-                    <div>
-                      <p className="font-bold text-xl uppercase"> price</p>
-                      <select style={{ marginTop: "-15px"}}
-                        className="w-full h-16 rounded-lg text-2xl pl-20"
-                        {...register("price", {
-                          required: {
-                            value: true,
-                            message: "Trip type is required",
-                          },
-                        })}
-                      >
-                        <option>All Prices</option>
-                        <option>$ 1000</option>
-                        <option>$ 2000</option>
-                        <option>$ 3000</option>
-                        <option>$ 4000</option>
-                        <option>$ 5000</option>
-                      </select>
-                    </div>
-                    {/* <div>Error</div> */}
-                  </div>
-                </div>
-              </div>
-
-              {/* btn section */}
-              <div>
-                <input
-                  type="submit"
-                  value="Find flight"
-                  className="w-full h-16 font-bold text-3xl uppercase rounded-lg bg-green-100 hover:bg-white"
-                />
-              </div>
+          {/* Dates */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Departure Date</label>
+              <input type="date" {...register('departureDate', { required: 'Required' })}
+                className={`w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 ${errors.departureDate ? 'border-red-400' : 'border-gray-200'}`} />
+              <FieldError msg={errors.departureDate?.message} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Return Date</label>
+              <input type="date" {...register('returnDate', { required: 'Required' })}
+                className={`w-full px-3 py-2.5 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 ${errors.returnDate ? 'border-red-400' : 'border-gray-200'}`} />
+              <FieldError msg={errors.returnDate?.message} />
             </div>
           </div>
-      </form>
+
+          {/* Class & Price */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Class</label>
+              <select {...register('class', { required: true })}
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <option>Economy</option>
+                <option>Business</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Max Price</label>
+              <select {...register('price', { required: true })}
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                <option>All Prices</option>
+                <option>$ 1000</option>
+                <option>$ 2000</option>
+                <option>$ 3000</option>
+                <option>$ 4000</option>
+                <option>$ 5000</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit"
+            className="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 rounded-xl text-sm transition-colors">
+            Search Flights
+          </button>
+        </form>
+      </div>
     </div>
   );
-};
-
-export default BookTicket;
+}

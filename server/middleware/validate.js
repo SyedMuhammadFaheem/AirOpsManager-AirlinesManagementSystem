@@ -36,6 +36,7 @@ const validateClient = [
   body('phone').trim().notEmpty().isLength({ max: 14 }),
   body('email').trim().isEmail(),
   body('passport').trim().notEmpty().isLength({ max: 40 }),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   handleValidation,
 ];
 
@@ -57,6 +58,7 @@ const validateFlight = [
   body('schedule_id').isInt({ min: 1 }),
   body('flightStatus_id').isInt({ min: 1 }),
   body('airplane_id').isInt({ min: 1 }),
+  body('fares').isInt({ min: 0 }).withMessage('Fares must be a non-negative integer'),
   handleValidation,
 ];
 

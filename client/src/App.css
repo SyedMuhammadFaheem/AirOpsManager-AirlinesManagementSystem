@@ -1,10 +1,27 @@
+/* App-level overrides — all component styling lives in index.css via Tailwind */
 
-* {
-  font-family: 'Sora', sans-serif;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Toast overrides to match dark theme */
+.Toastify__toast {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 14px;
+  border-radius: 10px;
 }
 
+/* React-toastify dark toast */
+.Toastify__toast--dark {
+  background: #1F2937;
+  color: #F9FAFB;
+}
 
+/* Ensure SweetAlert2 modals match design */
+.swal2-popup {
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+  background: #1F2937 !important;
+  color: #F9FAFB !important;
+  border-radius: 12px !important;
+}
 
+.swal2-title { color: #F9FAFB !important; }
+.swal2-content { color: #9CA3AF !important; }
+.swal2-confirm { background: #EF4444 !important; border-radius: 8px !important; }
+.swal2-cancel { background: #374151 !important; color: #F9FAFB !important; border-radius: 8px !important; }

@@ -1,216 +1,114 @@
-import React, { Component } from "react";
+import React, { useState } from 'react';
+import { useHistory, Link } from 'react-router-dom';
+import { Plane } from 'lucide-react';
+import Swal from 'sweetalert2';
 import apiClient from '../../api/client';
-import "./styles/Signin.css";
-import { withRouter, Link } from "react-router-dom";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-class Signup extends Component {
-  Swal = withReactContent(Swal);
-  constructor(props) {
-    super(props);
-    this.state = {
-      fname: "",
-      mname: "",
-      lname: "",
-      phone: "",
-      email: "",
-      passport: "",
-      password: "",
-      confirmPass: "",
-    };
-  }
 
-  handleFname = (event) => {
-    this.setState({
-      fname: event.target.value,
-    });
-  };
-  handleMname = (event) => {
-    this.setState({
-      mname: event.target.value,
-    });
-  };
-  handleLname = (event) => {
-    this.setState({
-      lname: event.target.value,
-    });
-  };
-  handlePhone = (event) => {
-    this.setState({
-      phone: event.target.value,
-    });
-  };
-  handleEmail = (event) => {
-    this.setState({
-      email: event.target.value,
-    });
-  };
-  handlePassport = (event) => {
-    this.setState({
-      passport: event.target.value,
-    });
-  };
+const empty = { fname: '', mname: '', lname: '', phone: '', email: '', passport: '', password: '', confirmPass: '' };
 
-  handlePasswordChange = (event) => {
-    this.setState({
-      password: event.target.value,
-    });
-  };
-  handleConfirmPass = (event) => {
-    this.setState({
-      confirmPass: event.target.value,
-    });
-  };
-  encrypt()
-    {
-        let s=4;
-        var text=this.state.password;
-        let result=""
-        for (let i = 0; i < text.length; i++)
-        {
-            let char = text[i];
-            if (char.toUpperCase(text[i]))
-            {
-                let ch =  String.fromCharCode((char.charCodeAt(0) + s-65) % 26 + 65);
-                result += ch;
-                this.setState({
-                  password:result
-                })
-            }
-            else
-            {
-                let ch = String.fromCharCode((char.charCodeAt(0) + s-97) % 26 + 97);
-                result += ch;
-                this.setState({
-                  password:result
-                })
-            }
-        }
-        
-    }
-  register = (e) => {
+function Field({ label, name, type = 'text', placeholder, autoComplete, value, onChange }) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
+      <input type={type} autoComplete={autoComplete} value={value} onChange={onChange}
+        required placeholder={placeholder}
+        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors" />
+    </div>
+  );
+}
+
+export default function Signup({ history: historyProp }) {
+  const historyHook = useHistory();
+  const history = historyProp || historyHook;
+  const [state, setState] = useState(empty);
+  const [loading, setLoading] = useState(false);
+
+  const set = (field) => (e) => setState(s => ({ ...s, [field]: e.target.value }));
+
+  const register = async (e) => {
     e.preventDefault();
-    if (this.state.password !== this.state.confirmPass) {
+    if (state.password !== state.confirmPass) {
       Swal.fire("Password doesn't match confirm password!", '', 'error');
       return;
     }
-    apiClient.post('/auth/signup', {
-      fname: this.state.fname,
-      mname: this.state.mname,
-      lname: this.state.lname,
-      phone: this.state.phone,
-      email: this.state.email,
-      passport: this.state.passport,
-      password: this.state.password,
-    }).then(() => {
+    setLoading(true);
+    try {
+      await apiClient.post('/auth/signup', {
+        fname: state.fname,
+        mname: state.mname,
+        lname: state.lname,
+        phone: state.phone,
+        email: state.email,
+        passport: state.passport,
+        password: state.password,
+      });
       Swal.fire('Registered Successfully!', '', 'success');
-      setTimeout(() => this.props.history.push('/CustomerSignin'), 500);
-    }).catch(() => Swal.fire('Error in Signup!', '', 'error'));
-
-
+      setTimeout(() => history.push('/customer-signin'), 500);
+    } catch {
+      Swal.fire('Error in Signup!', '', 'error');
+    } finally {
+      setLoading(false);
+    }
   };
-  render() {
-    return (
-      <div className="Auth-form-container bg-image">
-        <form className="Auth-form" onSubmit={this.register}>
-          <div className="Auth-form-content">
-            <h3 className="Auth-form-title">Sign Up</h3>
-            <div className="form-group mt-3">
-              <label>First Name</label>
-              <input
-                type="text"
-                required
-                className="form-control mt-1"
-                placeholder="e.g Jane"
-                onChange={this.handleFname} style={{width:'320px'}}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Middle Name</label>
-              <input
-                type="text"
-                required
-                className="form-control mt-1"
-                placeholder="e.g Doe"
-                onChange={this.handleMname} style={{width:'320px'}}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Last Name</label>
-              <input
-                type="text"
-                required
-                className="form-control mt-1"
-                placeholder="e.g Smith"
-                onChange={this.handleLname} style={{width:'320px'}}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Phone</label>
-              <input
-                type="tel"
-                required
-                className="form-control mt-1"
-                placeholder="e.g 923312613326"
-                onChange={this.handlePhone} style={{width:'320px'}}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Email</label>
-              <input
-                type="email"
-                required
-                className="form-control mt-1"
-                placeholder="e.g John@example.com"
-                onChange={this.handleEmail} style={{width:'320px'}}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Passport</label>
-              <input
-                type="text"
-                required
-                className="form-control mt-1"
-                placeholder="Passport"
-                onChange={this.handlePassport} style={{width:'320px'}}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Password</label>
-              <input
-                type="password"
-                required
-                className="form-control mt-1"
-                placeholder="e.g rXhAz29$%1"
-                onChange={this.handlePasswordChange} style={{width:'320px'}}
-              />
-            </div>
-            <div className="form-group mt-3">
-              <label>Confirm Password</label>
-              <input
-                type="password"
-                required
-                className="form-control mt-1"
-                placeholder=""
-                onChange={this.handleConfirmPass} style={{width:'320px'}}
-              />
-            </div>
-            <div className="d-grid gap-2 mt-3">
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </div>
-            <p className="forgot-password text-right mt-2">
-              Already have an account?{" "}
-              <Link to="/CustomerSignin">
-                <a> Login</a>
-              </Link>
-            </p>
-          </div>
-        </form>
-      </div>
-    );
-  }
-}
 
-export default withRouter(Signup);
+  return (
+    <div className="min-h-screen flex animate-fade-in">
+      {/* Left brand panel */}
+      <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-sky-700 via-sky-600 to-sky-400 flex-col justify-between p-12">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
+            <Plane size={18} className="text-white" />
+          </div>
+          <span className="text-white font-bold text-lg">AirOps Manager</span>
+        </div>
+        <div>
+          <h1 className="text-3xl font-display font-bold text-white leading-tight mb-4">
+            Join AirOps<br />Manager Today
+          </h1>
+          <p className="text-sky-100 text-sm leading-relaxed">
+            Create your account and start booking flights to destinations around the world.
+          </p>
+        </div>
+        <p className="text-sky-200 text-xs">Already have an account? <Link to="/customer-signin" className="text-white font-semibold underline">Sign in</Link></p>
+      </div>
+
+      {/* Right form panel */}
+      <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-12 bg-white overflow-y-auto">
+        <div className="max-w-md w-full mx-auto">
+          <div className="flex items-center gap-2 mb-6 lg:hidden">
+            <Plane size={20} className="text-sky-500" />
+            <span className="font-bold text-gray-900">AirOps Manager</span>
+          </div>
+
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">Create Account</h2>
+          <p className="text-sm text-gray-500 mb-6">Fill in your details to get started</p>
+
+          <form onSubmit={register} className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="First Name" name="fname" placeholder="Jane" value={state.fname} onChange={set('fname')} />
+              <Field label="Last Name" name="lname" placeholder="Smith" value={state.lname} onChange={set('lname')} />
+            </div>
+            <Field label="Middle Name" name="mname" placeholder="Doe" value={state.mname} onChange={set('mname')} />
+            <Field label="Phone" name="phone" type="tel" placeholder="+923312613326" autoComplete="tel" value={state.phone} onChange={set('phone')} />
+            <Field label="Email" name="email" type="email" placeholder="jane@example.com" autoComplete="email" value={state.email} onChange={set('email')} />
+            <Field label="Passport Number" name="passport" placeholder="AA1234567" value={state.passport} onChange={set('passport')} />
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Password" name="password" type="password" placeholder="••••••••" autoComplete="new-password" value={state.password} onChange={set('password')} />
+              <Field label="Confirm Password" name="confirmPass" type="password" placeholder="••••••••" autoComplete="new-password" value={state.confirmPass} onChange={set('confirmPass')} />
+            </div>
+
+            <button type="submit" disabled={loading}
+              className="w-full bg-sky-500 hover:bg-sky-600 disabled:opacity-60 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2 mt-2">
+              {loading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Creating account…</> : 'Create Account'}
+            </button>
+          </form>
+
+          <p className="text-center text-sm text-gray-500 mt-5">
+            Already have an account?{' '}
+            <Link to="/customer-signin" className="text-sky-500 font-medium hover:underline">Sign in</Link>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

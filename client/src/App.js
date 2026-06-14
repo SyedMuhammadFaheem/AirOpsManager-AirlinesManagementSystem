@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import { Switch, Route, BrowserRouter, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -53,16 +52,15 @@ const BoardingPass       = React.lazy(() => import('./components/Pages/BoardingP
 const Invoice            = React.lazy(() => import('./components/Pages/Invoice'));
 const AddReviews         = React.lazy(() => import('./components/Pages/AddReviews'));
 const ViewCustomerTickets = React.lazy(() => import('./components/Pages/ViewCustomerTickets'));
+const NotFound            = React.lazy(() => import('./components/Pages/NotFound'));
 
 // Routes where the public Navbar should not appear
 const NO_NAVBAR_PATHS = [
-  '/AdminPanel', '/Client', '/Airplane', '/FlightStatus', '/Gates', '/Airport',
-  '/Reviews', '/Schedule', '/Flight', '/Ticket', '/Booking',
-  '/AddEditClient', '/AddEditAirplane', '/AddEditSchedule', '/AddFlight', '/EditTicket',
-  '/Update/', '/UpdateAirplane/', '/UpdateSchedule/', '/View/', '/ViewAirplane/',
-  '/ViewFlightStatus/', '/ViewGates/', '/ViewAirport/', '/ViewReviews/', '/ViewSchedule/',
-  '/ViewFlight/', '/ViewTicket/', '/CustomerPanel/', '/ViewProfile/', '/BoardingPass/',
-  '/Invoice/', '/AddReviews/', '/ViewCustomerTickets/', '/AvailableFlights/',
+  '/admin-panel', '/clients', '/airplanes', '/flight-status', '/gates', '/airports',
+  '/reviews', '/schedules', '/flights', '/tickets', '/bookings',
+  '/customer-panel/', '/profile/', '/book-ticket/', '/available-flights/', '/boarding-pass/',
+  '/invoice/', '/add-review/', '/my-tickets/',
+  '/signin', '/customer-signin', '/sign-up',
 ];
 
 function AppRoutes() {
@@ -73,7 +71,7 @@ function AppRoutes() {
     <>
       <ToastContainer position="top-center" />
       {showNavbar && <Navbar />}
-      <Suspense fallback={<div className="d-flex justify-content-center mt-5"><div className="spinner-border" /></div>}>
+      <Suspense fallback={<div className="flex items-center justify-center min-h-screen bg-navy-900"><div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" /></div>}>
         <Switch>
           {/* Public routes */}
           <Route exact path="/" component={Home} />
@@ -81,48 +79,49 @@ function AppRoutes() {
           <Route path="/contact-us" component={Contact} />
           <Route path="/signin" component={Signin} />
           <Route path="/sign-up" component={Signup} />
-          <Route path="/CustomerSignin" component={CustomerSignin} />
-          <Route path="/BookTicket" component={BookTicket} />
-
+          <Route path="/customer-signin" component={CustomerSignin} />
           {/* Admin-protected routes */}
-          <ProtectedRoute path="/AdminPanel" component={AdminPanel} />
-          <ProtectedRoute path="/Client" component={Client} />
-          <ProtectedRoute path="/AddEditClient" component={AddEditClient} />
-          <ProtectedRoute path="/Update/:id" component={AddEditClient} />
-          <ProtectedRoute path="/View/:id" component={ViewClient} />
-          <ProtectedRoute path="/Airplane" component={Airplane} />
-          <ProtectedRoute path="/AddEditAirplane" component={AddEditAirplane} />
-          <ProtectedRoute path="/UpdateAirplane/:id" component={AddEditAirplane} />
-          <ProtectedRoute path="/ViewAirplane/:id" component={ViewAirplane} />
-          <ProtectedRoute path="/FlightStatus" component={FlightStatus} />
-          <ProtectedRoute path="/ViewFlightStatus/:id" component={ViewFlightStatus} />
-          <ProtectedRoute path="/Gates" component={Gates} />
-          <ProtectedRoute path="/ViewGates/:id" component={ViewGates} />
-          <ProtectedRoute path="/Airport" component={Airport} />
-          <ProtectedRoute path="/ViewAirport/:id" component={ViewAirport} />
-          <ProtectedRoute path="/Reviews" component={Reviews} />
-          <ProtectedRoute path="/ViewReviews/:id" component={ViewReviews} />
-          <ProtectedRoute path="/Schedule" component={Schedule} />
-          <ProtectedRoute path="/AddEditSchedule" component={AddEditSchedule} />
-          <ProtectedRoute path="/UpdateSchedule/:id" component={AddEditSchedule} />
-          <ProtectedRoute path="/ViewSchedule/:id" component={ViewSchedule} />
-          <ProtectedRoute path="/Flight" component={Flight} />
-          <ProtectedRoute path="/AddFlight" component={AddFlight} />
-          <ProtectedRoute path="/ViewFlight/:id" component={ViewFlight} />
-          <ProtectedRoute path="/Ticket" component={Ticket} />
-          <ProtectedRoute path="/EditTicket" component={EditTicket} />
-          <ProtectedRoute path="/ViewTicket/:id" component={ViewTicket} />
-          <ProtectedRoute path="/Booking" component={Booking} />
+          <ProtectedRoute path="/admin-panel" component={AdminPanel} />
+          <ProtectedRoute path="/clients" component={Client} exact />
+          <ProtectedRoute path="/clients/new" component={AddEditClient} />
+          <ProtectedRoute path="/clients/:id/edit" component={AddEditClient} />
+          <ProtectedRoute path="/clients/:id" component={ViewClient} />
+          <ProtectedRoute path="/airplanes" component={Airplane} exact />
+          <ProtectedRoute path="/airplanes/new" component={AddEditAirplane} />
+          <ProtectedRoute path="/airplanes/:id/edit" component={AddEditAirplane} />
+          <ProtectedRoute path="/airplanes/:id" component={ViewAirplane} />
+          <ProtectedRoute path="/flight-status" component={FlightStatus} exact />
+          <ProtectedRoute path="/flight-status/:id" component={ViewFlightStatus} />
+          <ProtectedRoute path="/gates" component={Gates} exact />
+          <ProtectedRoute path="/gates/:id" component={ViewGates} />
+          <ProtectedRoute path="/airports" component={Airport} exact />
+          <ProtectedRoute path="/airports/:id" component={ViewAirport} />
+          <ProtectedRoute path="/reviews" component={Reviews} exact />
+          <ProtectedRoute path="/reviews/:id" component={ViewReviews} />
+          <ProtectedRoute path="/schedules" component={Schedule} exact />
+          <ProtectedRoute path="/schedules/new" component={AddEditSchedule} />
+          <ProtectedRoute path="/schedules/:id/edit" component={AddEditSchedule} />
+          <ProtectedRoute path="/schedules/:id" component={ViewSchedule} />
+          <ProtectedRoute path="/flights" component={Flight} exact />
+          <ProtectedRoute path="/flights/new" component={AddFlight} />
+          <ProtectedRoute path="/flights/:id" component={ViewFlight} />
+          <ProtectedRoute path="/tickets" component={Ticket} exact />
+          <ProtectedRoute path="/tickets/edit/:id" component={EditTicket} />
+          <ProtectedRoute path="/tickets/:id" component={ViewTicket} />
+          <ProtectedRoute path="/bookings" component={Booking} />
 
           {/* Customer-protected routes */}
-          <CustomerRoute path="/CustomerPanel/:id" component={CustomerPanel} />
-          <CustomerRoute path="/ViewProfile/:id" component={ViewProfile} />
-          <CustomerRoute path="/BookTicket/:id" component={BookTicket} />
-          <CustomerRoute path="/AvailableFlights/:id" component={AvailableFlights} />
-          <CustomerRoute path="/BoardingPass/:id" component={BoardingPass} />
-          <CustomerRoute path="/Invoice/:id" component={Invoice} />
-          <CustomerRoute path="/AddReviews/:id" component={AddReviews} />
-          <CustomerRoute path="/ViewCustomerTickets/:id" component={ViewCustomerTickets} />
+          <CustomerRoute path="/customer-panel/:id" component={CustomerPanel} />
+          <CustomerRoute path="/profile/:id" component={ViewProfile} />
+          <CustomerRoute path="/book-ticket/:id" component={BookTicket} />
+          <CustomerRoute path="/available-flights/:id" component={AvailableFlights} />
+          <CustomerRoute path="/boarding-pass/:id" component={BoardingPass} />
+          <CustomerRoute path="/invoice/:id" component={Invoice} />
+          <CustomerRoute path="/add-review/:id" component={AddReviews} />
+          <CustomerRoute path="/my-tickets/:id" component={ViewCustomerTickets} />
+
+          {/* 404 catch-all */}
+          <Route component={NotFound} />
         </Switch>
       </Suspense>
     </>

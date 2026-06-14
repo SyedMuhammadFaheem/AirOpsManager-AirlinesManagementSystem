@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const db = require('../db/pool');
 const { verifyAdmin } = require('../middleware/auth');
 const { validateClient } = require('../middleware/validate');
@@ -24,16 +25,24 @@ router.get('/get/:id', verifyAdmin, (req, res) => {
   );
 });
 
-router.post('/post', verifyAdmin, validateClient, (req, res) => {
-  const { fname, mname, lname, phone, email, passport } = req.body;
-  db.query(
-    'INSERT INTO clients (fname, mname, lname, phone, email, passport) VALUES (?, ?, ?, ?, ?, ?)',
-    [fname, mname || null, lname, phone, email, passport],
-    (err) => {
-      if (err) return res.status(500).json({ message: 'Could not create client' });
-      res.status(201).json({ success: true });
-    }
-  );
+router.post('/post', verifyAdmin, validateClient, async (req, res) => {
+  const { fname, mname, lname, phone, email, passport, password } = req.body;
+  try {
+    const hash = await bcrypt.hash(password, 10);
+    db.query(
+      'INSERT INTO clients (fname, mname, lname, phone, email, passport, password) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [fname, mname || null, lname, phone, email, passport, hash],
+      (err) => {
+        if (err) {
+          if (err.code === 'ER_DUP_ENTRY') return res.status(409).json({ message: 'Email already registered' });
+          return res.status(500).json({ message: 'Could not create client' });
+        }
+        res.status(201).json({ success: true });
+      }
+    );
+  } catch {
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 router.put('/update/:id', verifyAdmin, validateClient, (req, res) => {

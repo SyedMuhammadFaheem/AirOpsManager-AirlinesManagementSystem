@@ -93,16 +93,6 @@ INSERT INTO Ticket VALUES
 INSERT INTO TempSeatGen (nm) VALUES
   ('A01'),('D01'),('E21'),('F21'),('G31'),('H01'),('I01'),('J01'),('K01');
 
--- Trigger: assign random seat after ticket insert
-DROP TRIGGER IF EXISTS Ticket_AFTER_INSERT;
-DELIMITER $$
-CREATE TRIGGER Ticket_AFTER_INSERT AFTER INSERT ON Ticket FOR EACH ROW
-BEGIN
-  UPDATE Ticket SET seat_no = (SELECT nm FROM TempSeatGen ORDER BY RAND() LIMIT 1)
-  WHERE seat_no IS NULL AND ticket_id = NEW.ticket_id;
-END$$
-DELIMITER ;
-
 -- Trigger: fill booking after ticket insert
 DROP TRIGGER IF EXISTS fill_booking;
 DELIMITER $$
