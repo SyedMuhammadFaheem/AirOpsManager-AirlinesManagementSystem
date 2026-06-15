@@ -7,11 +7,19 @@ const { validateAdminLogin, validateCustomerLogin, validateSignup } = require('.
 
 const router = express.Router();
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  sameSite: 'strict',
-  secure: process.env.NODE_ENV === 'production',
+  sameSite: isProduction ? 'none' : 'strict',
+  secure: isProduction,
   maxAge: 8 * 60 * 60 * 1000, // 8 hours
+};
+
+const CLEAR_OPTIONS = {
+  httpOnly: true,
+  sameSite: isProduction ? 'none' : 'strict',
+  secure: isProduction,
 };
 
 router.post('/login', adminLimiter, validateAdminLogin, (req, res) => {
@@ -27,7 +35,7 @@ router.post('/login', adminLimiter, validateAdminLogin, (req, res) => {
       if (!match) return res.status(401).json({ message: 'Invalid credentials' });
 
       const token = jwt.sign({ username, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: '8h' });
-      res.clearCookie('customer_token');
+      res.clearCookie('customer_token', CLEAR_OPTIONS);
       res.cookie('admin_token', token, COOKIE_OPTIONS);
       res.json({ success: true });
     }
@@ -48,7 +56,7 @@ router.post('/customerlogin', customerLimiter, validateCustomerLogin, (req, res)
 
       const { password: _pw, ...safeUser } = results[0];
       const token = jwt.sign({ client_id: safeUser.client_id, role: 'customer' }, process.env.JWT_SECRET, { expiresIn: '8h' });
-      res.clearCookie('admin_token');
+      res.clearCookie('admin_token', CLEAR_OPTIONS);
       res.cookie('customer_token', token, COOKIE_OPTIONS);
       res.json({ success: true, user: safeUser });
     }
@@ -75,8 +83,8 @@ router.post('/signup', validateSignup, async (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
-  res.clearCookie('admin_token');
-  res.clearCookie('customer_token');
+  res.clearCookie('admin_token', CLEAR_OPTIONS);
+  res.clearCookie('customer_token', CLEAR_OPTIONS);
   res.json({ success: true });
 });
 
