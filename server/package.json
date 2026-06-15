@@ -20,9 +20,9 @@
     "express-validator": "^7.0.1",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
-    "mysql2": "^2.3.3"
+    "mysql2": "^3.22.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^3.1.14"
   }
 }

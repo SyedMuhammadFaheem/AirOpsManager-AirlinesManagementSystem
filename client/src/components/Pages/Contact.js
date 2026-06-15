@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Clock, Send } from 'lucide-react';
 import Footer from './Footer';
+import SEO from '../SEO';
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -16,6 +17,11 @@ export default function Contact() {
 
   return (
     <>
+      <SEO
+        title="Contact Us"
+        description="Get in touch with the AirOpsManager team. Reach us at 1 World Trade Center, New York or send a message online. We respond within 24 hours."
+        path="/contact-us"
+      />
       {/* Hero */}
       <section className="bg-gradient-to-br from-navy-900 to-sky-700 text-white py-20 text-center">
         <h1 className="text-4xl lg:text-5xl font-display font-bold mb-3">Contact Us</h1>
