@@ -28,7 +28,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "patch-package"
   },
   "overrides": {
     "@tootallnate/once": "^2.0.1",
@@ -37,7 +38,7 @@
     "postcss": "^8.5.26",
     "serialize-javascript": "^7.0.7",
     "uuid": "^11.1.1",
-    "webpack-dev-server": "^4.15.2",
+    "webpack-dev-server": "^5.2.6",
     "workbox-build": "^7.4.1",
     "workbox-webpack-plugin": "^7.4.1",
     "@svgr/webpack": "^8.1.0",
@@ -60,5 +61,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "patch-package": "^8.0.1"
   }
 }
