@@ -121,7 +121,7 @@ export default function Home() {
             Join the airlines and operators already running smarter with AirOps Manager.
           </p>
           <Link to="/book-ticket"
-            className="inline-block px-8 py-4 bg-white text-sky-600 font-bold rounded-xl hover:bg-sky-50 transition-colors text-sm">
+            className="inline-block px-8 py-4 bg-white text-sky-700 font-bold rounded-xl hover:bg-sky-50 transition-colors text-sm">
             Get Started
           </Link>
         </div>

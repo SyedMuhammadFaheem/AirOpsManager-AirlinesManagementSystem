@@ -32,7 +32,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="border-t border-gray-800 pt-6 text-center text-xs text-gray-600">
+        <div className="border-t border-gray-800 pt-6 text-center text-xs text-gray-400">
           © 2026 AirOps Manager. All rights reserved.
         </div>
       </div>

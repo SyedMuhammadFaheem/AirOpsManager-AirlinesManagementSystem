@@ -62,7 +62,7 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className="px-3 pb-4 border-t border-navy-700 pt-3">
-        <p className="text-xs text-gray-600 px-3">AirOpsManager v2.0</p>
+        <p className="text-xs text-gray-400 px-3">AirOpsManager v2.0</p>
       </div>
     </nav>
   );

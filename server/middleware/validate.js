@@ -36,7 +36,7 @@ const validateClient = [
   body('phone').trim().notEmpty().isLength({ max: 14 }),
   body('email').trim().isEmail(),
   body('passport').trim().notEmpty().isLength({ max: 40 }),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+  body('password').if((_, { req }) => req.method !== 'PUT').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   handleValidation,
 ];
 

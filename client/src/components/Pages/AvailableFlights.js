@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Plane, Clock, ArrowRight } from 'lucide-react';
+import Swal from 'sweetalert2';
 import apiClient from '../../api/client';
 import CustomerNavbar from '../CustomerNavbar';
 
@@ -37,7 +38,10 @@ export default function AvailableFlights() {
       setData(ret.data);
       setLoading(false);
     };
-    load().catch(() => setLoading(false));
+    load().catch(() => {
+      setLoading(false);
+      Swal.fire('Could not load flights', 'Please try your search again.', 'error');
+    });
   }, []);
 
   const statusClass = (s) => {
@@ -102,11 +106,17 @@ export default function AvailableFlights() {
                       <span className="text-sky-600 font-semibold text-sm">$ {item.fares}</span>
                     </div>
                   </div>
-                  <Link
-                    to={id > 0 ? `/invoice/${item.schedule_id}-${id}` : '/customer-signin'}
-                    className={`flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${id > 0 ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}>
-                    {id > 0 ? 'Book' : 'Login'}
-                  </Link>
+                  {item.schedule_id ? (
+                    <Link
+                      to={id > 0 ? `/invoice/${item.schedule_id}-${id}` : '/customer-signin'}
+                      className={`flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${id > 0 ? 'bg-sky-500 hover:bg-sky-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}>
+                      {id > 0 ? 'Book' : 'Login'}
+                    </Link>
+                  ) : (
+                    <span className="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold bg-gray-100 text-gray-400 cursor-not-allowed">
+                      Unavailable
+                    </span>
+                  )}
                 </div>
               </div>
             ))}

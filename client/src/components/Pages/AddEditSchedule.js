@@ -77,8 +77,8 @@ export default function AddEditSchedule() {
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-400 mb-1.5">Duration</label>
-              <input name="duration_time" value={state.duration_time || ''} onChange={handleChange} placeholder="e.g. 2h 30m" className="admin-input" />
+              <label className="block text-xs font-medium text-gray-400 mb-1.5">Duration (hours)</label>
+              <input type="number" step="0.1" min="0" name="duration_time" value={state.duration_time || ''} onChange={handleChange} placeholder="e.g. 2.5" className="admin-input" />
             </div>
           </div>
           <div className="flex items-center justify-end gap-3 mt-5">

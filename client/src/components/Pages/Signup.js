@@ -6,12 +6,12 @@ import apiClient from '../../api/client';
 
 const empty = { fname: '', mname: '', lname: '', phone: '', email: '', passport: '', password: '', confirmPass: '' };
 
-function Field({ label, name, type = 'text', placeholder, autoComplete, value, onChange }) {
+function Field({ label, name, type = 'text', placeholder, autoComplete, required = true, value, onChange }) {
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
       <input type={type} autoComplete={autoComplete} value={value} onChange={onChange}
-        required placeholder={placeholder}
+        required={required} placeholder={placeholder}
         className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors" />
     </div>
   );
@@ -42,7 +42,7 @@ export default function Signup({ history: historyProp }) {
         passport: state.passport,
         password: state.password,
       });
-      Swal.fire('Registered Successfully!', '', 'success');
+      Swal.fire({ title: 'Registered Successfully!', icon: 'success', timer: 1200, showConfirmButton: false });
       setTimeout(() => history.push('/customer-signin'), 500);
     } catch {
       Swal.fire('Error in Signup!', '', 'error');
@@ -88,7 +88,7 @@ export default function Signup({ history: historyProp }) {
               <Field label="First Name" name="fname" placeholder="Jane" value={state.fname} onChange={set('fname')} />
               <Field label="Last Name" name="lname" placeholder="Smith" value={state.lname} onChange={set('lname')} />
             </div>
-            <Field label="Middle Name" name="mname" placeholder="Doe" value={state.mname} onChange={set('mname')} />
+            <Field label="Middle Name" name="mname" placeholder="Doe" required={false} value={state.mname} onChange={set('mname')} />
             <Field label="Phone" name="phone" type="tel" placeholder="+923312613326" autoComplete="tel" value={state.phone} onChange={set('phone')} />
             <Field label="Email" name="email" type="email" placeholder="jane@example.com" autoComplete="email" value={state.email} onChange={set('email')} />
             <Field label="Passport Number" name="passport" placeholder="AA1234567" value={state.passport} onChange={set('passport')} />
@@ -98,14 +98,14 @@ export default function Signup({ history: historyProp }) {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full bg-sky-500 hover:bg-sky-600 disabled:opacity-60 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2 mt-2">
+              className="w-full bg-sky-700 hover:bg-sky-800 disabled:opacity-60 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2 mt-2">
               {loading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Creating account…</> : 'Create Account'}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-500 mt-5">
             Already have an account?{' '}
-            <Link to="/customer-signin" className="text-sky-500 font-medium hover:underline">Sign in</Link>
+            <Link to="/customer-signin" className="text-sky-700 font-medium hover:underline">Sign in</Link>
           </p>
         </div>
       </div>

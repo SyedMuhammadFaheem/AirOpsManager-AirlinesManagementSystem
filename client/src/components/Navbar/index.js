@@ -89,7 +89,7 @@ export default function Navbar() {
             </div>
             <Link
               to="/signin"
-              className="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium rounded-lg transition-colors"
+              className="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium rounded-lg transition-colors"
             >
               Admin Portal
             </Link>
@@ -125,7 +125,7 @@ export default function Navbar() {
             <Link to="/customer-signin" className="block px-4 py-3 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-navy-800 transition-colors">
               Customer Sign In
             </Link>
-            <Link to="/signin" className="block px-4 py-3 rounded-lg text-sm font-medium text-center bg-brand-500 hover:bg-brand-600 text-white transition-colors">
+            <Link to="/signin" className="block px-4 py-3 rounded-lg text-sm font-medium text-center bg-brand-600 hover:bg-brand-700 text-white transition-colors">
               Admin Portal
             </Link>
           </div>

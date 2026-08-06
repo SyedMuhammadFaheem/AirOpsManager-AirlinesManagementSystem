@@ -16,7 +16,7 @@ export default function CustomerPanel() {
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
 
   const actions = [
-    { label: 'Book a Flight', desc: 'Search and reserve your next journey', icon: Search, to: `/book-ticket/${id}`, color: 'bg-sky-500 hover:bg-sky-600 text-white' },
+    { label: 'Book a Flight', desc: 'Search and reserve your next journey', icon: Search, to: `/book-ticket/${id}`, color: 'bg-sky-700 hover:bg-sky-800 text-white' },
     { label: 'My Tickets', desc: 'View your boarding passes', icon: Ticket, to: `/my-tickets/${id}`, color: 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-200' },
     { label: 'View Profile', desc: 'Manage your account details', icon: User, to: `/profile/${id}`, color: 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-200' },
     { label: 'Leave a Review', desc: 'Share your travel experience', icon: Star, to: `/add-review/${id}`, color: 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-200' },
