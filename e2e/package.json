@@ -1,0 +1,17 @@
+{
+  "name": "airops-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test tests/a11y tests/admin tests/auth tests/cross-cutting tests/customer tests/validation; playwright test tests/security",
+    "test:headed": "playwright test --headed",
+    "db:reset": "node scripts/reset-db.js"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.48.0",
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.11.3",
+    "typescript": "^5.6.2"
+  }
+}

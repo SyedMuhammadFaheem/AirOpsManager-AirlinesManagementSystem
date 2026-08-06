@@ -63,7 +63,7 @@ export default function AdminPanel() {
   ];
 
   const quickActions = [
-    { icon: Plus,         label: 'Add Flight',    path: '/flights/new',     color: 'bg-brand-500 hover:bg-brand-600 text-white' },
+    { icon: Plus,         label: 'Add Flight',    path: '/flights/new',     color: 'bg-brand-600 hover:bg-brand-700 text-white' },
     { icon: CalendarClock,label: 'Add Schedule',  path: '/schedules/new',   color: 'bg-navy-700 hover:bg-navy-600 text-gray-200 border border-navy-600' },
     { icon: Users,        label: 'View Clients',  path: '/clients',         color: 'bg-navy-700 hover:bg-navy-600 text-gray-200 border border-navy-600' },
     { icon: BookOpen,     label: 'All Bookings',  path: '/bookings',        color: 'bg-navy-700 hover:bg-navy-600 text-gray-200 border border-navy-600' },
@@ -77,7 +77,7 @@ export default function AdminPanel() {
           <h1 className="text-2xl font-display font-semibold text-white">
             {greeting()}, {auth.username || 'Admin'}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">{today}</p>
+          <p className="text-sm text-gray-400 mt-1">{today}</p>
         </div>
         <button
           onClick={handleLogout}
@@ -96,7 +96,7 @@ export default function AdminPanel() {
               <Icon size={20} className={color} />
             </div>
             <p className="text-2xl font-bold text-white font-mono">{value}</p>
-            <p className="text-xs text-gray-500 mt-0.5 font-medium">{label}</p>
+            <p className="text-xs text-gray-400 mt-0.5 font-medium">{label}</p>
           </div>
         ))}
       </div>
@@ -108,7 +108,7 @@ export default function AdminPanel() {
           <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="text-sm font-semibold text-white">Booking Trends</h2>
-              <p className="text-xs text-gray-500 mt-0.5">Monthly overview — last 12 months</p>
+              <p className="text-xs text-gray-400 mt-0.5">Monthly overview — last 12 months</p>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={220}>

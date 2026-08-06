@@ -81,14 +81,14 @@ export default function CustomerSignin() {
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors" />
             </div>
             <button type="submit" disabled={loading}
-              className="w-full bg-sky-500 hover:bg-sky-600 disabled:opacity-60 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2 mt-2">
+              className="w-full bg-sky-700 hover:bg-sky-800 disabled:opacity-60 text-white font-semibold py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2 mt-2">
               {loading ? <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Signing in…</> : 'Sign In'}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-500 mt-6">
             New customer?{' '}
-            <Link to="/sign-up" className="text-sky-500 font-medium hover:underline">Create an account</Link>
+            <Link to="/sign-up" className="text-sky-700 font-medium hover:underline">Create an account</Link>
           </p>
           <p className="text-center text-sm text-gray-500 mt-2">
             Admin?{' '}

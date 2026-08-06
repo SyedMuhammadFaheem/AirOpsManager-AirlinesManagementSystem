@@ -9,7 +9,7 @@ const ADMIN_PATHS = [
   '/admin-panel', '/clients', '/airplanes', '/flight-status',
   '/gates', '/airports', '/reviews', '/schedules', '/flights', '/tickets', '/bookings',
 ];
-const AUTH_ENDPOINTS = ['/auth/me', '/auth/login', '/auth/customerlogin'];
+const AUTH_ENDPOINTS = ['/auth/me', '/auth/login', '/auth/customerlogin', '/auth/signup'];
 
 apiClient.interceptors.response.use(
   res => res,

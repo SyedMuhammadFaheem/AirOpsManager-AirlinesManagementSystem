@@ -27,7 +27,9 @@ export default function Invoice() {
       setData(clientRes.data || {});
       setUser(faresRes.data || {});
     };
-    load();
+    load().catch(() => {
+      Swal.fire('Error', 'Could not load your booking details. Please try again.', 'error');
+    });
   }, [id]);
 
   const handlePay = async () => {

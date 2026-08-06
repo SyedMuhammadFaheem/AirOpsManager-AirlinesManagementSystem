@@ -87,40 +87,40 @@ function AppRoutes() {
           <ProtectedRoute path="/clients" component={Client} exact />
           <ProtectedRoute path="/clients/new" component={AddEditClient} />
           <ProtectedRoute path="/clients/:id/edit" component={AddEditClient} />
-          <ProtectedRoute path="/clients/:id" component={ViewClient} />
+          <ProtectedRoute exact path="/clients/:id" component={ViewClient} />
           <ProtectedRoute path="/airplanes" component={Airplane} exact />
           <ProtectedRoute path="/airplanes/new" component={AddEditAirplane} />
           <ProtectedRoute path="/airplanes/:id/edit" component={AddEditAirplane} />
-          <ProtectedRoute path="/airplanes/:id" component={ViewAirplane} />
+          <ProtectedRoute exact path="/airplanes/:id" component={ViewAirplane} />
           <ProtectedRoute path="/flight-status" component={FlightStatus} exact />
-          <ProtectedRoute path="/flight-status/:id" component={ViewFlightStatus} />
+          <ProtectedRoute exact path="/flight-status/:id" component={ViewFlightStatus} />
           <ProtectedRoute path="/gates" component={Gates} exact />
-          <ProtectedRoute path="/gates/:id" component={ViewGates} />
+          <ProtectedRoute exact path="/gates/:id" component={ViewGates} />
           <ProtectedRoute path="/airports" component={Airport} exact />
-          <ProtectedRoute path="/airports/:id" component={ViewAirport} />
+          <ProtectedRoute exact path="/airports/:id" component={ViewAirport} />
           <ProtectedRoute path="/reviews" component={Reviews} exact />
-          <ProtectedRoute path="/reviews/:id" component={ViewReviews} />
+          <ProtectedRoute exact path="/reviews/:id" component={ViewReviews} />
           <ProtectedRoute path="/schedules" component={Schedule} exact />
           <ProtectedRoute path="/schedules/new" component={AddEditSchedule} />
           <ProtectedRoute path="/schedules/:id/edit" component={AddEditSchedule} />
-          <ProtectedRoute path="/schedules/:id" component={ViewSchedule} />
+          <ProtectedRoute exact path="/schedules/:id" component={ViewSchedule} />
           <ProtectedRoute path="/flights" component={Flight} exact />
           <ProtectedRoute path="/flights/new" component={AddFlight} />
-          <ProtectedRoute path="/flights/:id" component={ViewFlight} />
+          <ProtectedRoute exact path="/flights/:id" component={ViewFlight} />
           <ProtectedRoute path="/tickets" component={Ticket} exact />
           <ProtectedRoute path="/tickets/edit/:id" component={EditTicket} />
-          <ProtectedRoute path="/tickets/:id" component={ViewTicket} />
+          <ProtectedRoute exact path="/tickets/:id" component={ViewTicket} />
           <ProtectedRoute path="/bookings" component={Booking} />
 
           {/* Customer-protected routes */}
-          <CustomerRoute path="/customer-panel/:id" component={CustomerPanel} />
-          <CustomerRoute path="/profile/:id" component={ViewProfile} />
-          <CustomerRoute path="/book-ticket/:id" component={BookTicket} />
-          <CustomerRoute path="/available-flights/:id" component={AvailableFlights} />
-          <CustomerRoute path="/boarding-pass/:id" component={BoardingPass} />
-          <CustomerRoute path="/invoice/:id" component={Invoice} />
-          <CustomerRoute path="/add-review/:id" component={AddReviews} />
-          <CustomerRoute path="/my-tickets/:id" component={ViewCustomerTickets} />
+          <CustomerRoute exact path="/customer-panel/:id" component={CustomerPanel} />
+          <CustomerRoute exact path="/profile/:id" component={ViewProfile} />
+          <CustomerRoute exact path="/book-ticket/:id" component={BookTicket} />
+          <CustomerRoute exact path="/available-flights/:id" component={AvailableFlights} />
+          <CustomerRoute exact path="/boarding-pass/:id" component={BoardingPass} />
+          <CustomerRoute exact path="/invoice/:id" component={Invoice} />
+          <CustomerRoute exact path="/add-review/:id" component={AddReviews} />
+          <CustomerRoute exact path="/my-tickets/:id" component={ViewCustomerTickets} />
 
           {/* 404 catch-all */}
           <Route component={NotFound} />

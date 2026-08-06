@@ -5,7 +5,7 @@ import { ArrowLeft, Users } from 'lucide-react';
 import apiClient from '../../api/client';
 import AdminLayout from '../Layout/AdminLayout';
 
-const empty = { client_id: '', fname: '', mname: '', lname: '', phone: '', email: '', passport: '', password: '' };
+const empty = { fname: '', mname: '', lname: '', phone: '', email: '', passport: '', password: '' };
 
 function Field({ label, name, type = 'text', required, placeholder, value, onChange }) {
   return (
@@ -33,8 +33,8 @@ export default function AddEditClient() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const { client_id, fname, lname, phone, email, passport, password } = state;
-    if (!client_id || !fname || !lname || !phone || !email || !passport) {
+    const { fname, lname, phone, email, passport, password } = state;
+    if (!fname || !lname || !phone || !email || !passport) {
       toast.error('Please fill all required fields'); return;
     }
     if (!id && !password) {
@@ -74,7 +74,6 @@ export default function AddEditClient() {
               <Field label="First Name" name="fname" required value={state.fname} onChange={handleChange} />
               <Field label="Last Name" name="lname" required value={state.lname} onChange={handleChange} />
               <Field label="Middle Name" name="mname" value={state.mname} onChange={handleChange} />
-              <Field label="Client ID" name="client_id" required placeholder="Unique ID" value={state.client_id} onChange={handleChange} />
             </div>
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider border-b border-navy-700 pb-3 pt-2">Contact & Identity</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

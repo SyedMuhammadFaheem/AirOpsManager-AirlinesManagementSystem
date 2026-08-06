@@ -34,7 +34,7 @@ export default function CustomerNavbar() {
               <Plane size={16} className="text-white" strokeWidth={2.5} />
             </div>
             <span className="font-display font-semibold text-navy-900 text-lg tracking-tight">
-              AirOps<span className="text-sky-500"> Manager</span>
+              AirOps<span className="text-sky-700"> Manager</span>
             </span>
           </Link>
 

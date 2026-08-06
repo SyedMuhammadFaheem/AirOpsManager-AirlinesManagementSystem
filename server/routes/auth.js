@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db/pool');
-const { adminLimiter, customerLimiter } = require('../middleware/rateLimiter');
+const { adminLimiter, customerLimiter, signupLimiter } = require('../middleware/rateLimiter');
 const { validateAdminLogin, validateCustomerLogin, validateSignup } = require('../middleware/validate');
 
 const router = express.Router();
@@ -63,7 +63,7 @@ router.post('/customerlogin', customerLimiter, validateCustomerLogin, (req, res)
   );
 });
 
-router.post('/signup', validateSignup, async (req, res) => {
+router.post('/signup', signupLimiter, validateSignup, async (req, res) => {
   const { fname, mname, lname, phone, email, passport, password } = req.body;
 
   db.query('SELECT client_id FROM clients WHERE email = ?', [email], async (err, existing) => {
@@ -94,11 +94,11 @@ router.get('/me', (req, res) => {
   try {
     if (adminToken) {
       const payload = jwt.verify(adminToken, process.env.JWT_SECRET);
-      return res.json({ role: 'admin', username: payload.username });
+      if (payload.role === 'admin') return res.json({ role: 'admin', username: payload.username });
     }
     if (customerToken) {
       const payload = jwt.verify(customerToken, process.env.JWT_SECRET);
-      return res.json({ role: 'customer', client_id: payload.client_id });
+      if (payload.role === 'customer') return res.json({ role: 'customer', client_id: payload.client_id });
     }
     res.status(401).json({ message: 'Not authenticated' });
   } catch {

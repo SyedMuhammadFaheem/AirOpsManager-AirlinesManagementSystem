@@ -47,23 +47,23 @@ export default function Slider() {
         </h1>
         <p className="text-white/80 text-base lg:text-lg max-w-lg mb-6">{slides[active].sub}</p>
         <Link to="/book-ticket/0"
-          className="inline-block px-6 py-3 bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-xl text-sm transition-colors">
+          className="inline-block px-6 py-3 bg-sky-700 hover:bg-sky-800 text-white font-semibold rounded-xl text-sm transition-colors">
           Book a Flight
         </Link>
       </div>
 
       {/* Controls */}
-      <button onClick={prev} className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors">
+      <button onClick={prev} aria-label="Previous slide" className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors">
         <ChevronLeft size={20} />
       </button>
-      <button onClick={next} className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors">
+      <button onClick={next} aria-label="Next slide" className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors">
         <ChevronRight size={20} />
       </button>
 
       {/* Dots */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         {slides.map((_, i) => (
-          <button key={i} onClick={() => setActive(i)}
+          <button key={i} onClick={() => setActive(i)} aria-label={`Go to slide ${i + 1}`}
             className={`rounded-full transition-all ${i === active ? 'w-6 h-2 bg-white' : 'w-2 h-2 bg-white/40'}`} />
         ))}
       </div>

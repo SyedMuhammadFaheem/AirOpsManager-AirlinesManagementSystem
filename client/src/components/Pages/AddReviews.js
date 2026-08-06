@@ -59,7 +59,7 @@ export default function AddReviews() {
                 placeholder="Tell us about your flight experience…"
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors resize-none"
               />
-              <p className="text-xs text-gray-400 mt-1">{review.length} characters</p>
+              <p className="text-xs text-gray-500 mt-1">{review.length} characters</p>
             </div>
 
             <div className="flex gap-3 pt-2">
@@ -68,7 +68,7 @@ export default function AddReviews() {
                 Cancel
               </button>
               <button type="submit"
-                className="flex-1 px-4 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-sm font-medium transition-colors">
+                className="flex-1 px-4 py-3 bg-sky-700 hover:bg-sky-800 text-white rounded-xl text-sm font-medium transition-colors">
                 Submit Review
               </button>
             </div>
