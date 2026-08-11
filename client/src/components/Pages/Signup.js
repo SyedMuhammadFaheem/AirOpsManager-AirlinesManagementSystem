@@ -3,6 +3,7 @@ import { useHistory, Link } from 'react-router-dom';
 import { Plane } from 'lucide-react';
 import Swal from 'sweetalert2';
 import apiClient from '../../api/client';
+import SEO from '../SEO';
 
 const empty = { fname: '', mname: '', lname: '', phone: '', email: '', passport: '', password: '', confirmPass: '' };
 
@@ -52,6 +53,12 @@ export default function Signup({ history: historyProp }) {
   };
 
   return (
+    <>
+      <SEO
+        title="Sign Up"
+        description="Create your AirOpsManager account to book flights, manage tickets, and track your travel — all in one place."
+        path="/sign-up"
+      />
     <div className="min-h-screen flex animate-fade-in">
       {/* Left brand panel */}
       <div className="hidden lg:flex lg:w-2/5 bg-gradient-to-br from-sky-700 via-sky-600 to-sky-400 flex-col justify-between p-12">
@@ -110,5 +117,6 @@ export default function Signup({ history: historyProp }) {
         </div>
       </div>
     </div>
+    </>
   );
 }
