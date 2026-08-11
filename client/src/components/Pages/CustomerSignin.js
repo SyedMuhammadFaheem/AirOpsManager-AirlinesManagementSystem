@@ -3,6 +3,7 @@ import { useHistory, Link } from 'react-router-dom';
 import { Plane, Lock, Mail } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { useAuth } from '../../contexts/AuthContext';
+import SEO from '../SEO';
 
 export default function CustomerSignin() {
   const { loginCustomer } = useAuth();
@@ -26,6 +27,12 @@ export default function CustomerSignin() {
   };
 
   return (
+    <>
+      <SEO
+        title="Customer Sign In"
+        description="Sign in to your AirOpsManager account to book flights, view your tickets, and manage your travel."
+        path="/customer-signin"
+      />
     <div className="min-h-screen flex animate-fade-in">
       {/* Left brand panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-sky-700 via-sky-600 to-sky-500 flex-col justify-between p-12">
@@ -97,5 +104,6 @@ export default function CustomerSignin() {
         </div>
       </div>
     </div>
+    </>
   );
 }
